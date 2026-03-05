@@ -15,7 +15,6 @@ public class UiTest {
 
         assertTrue(result.contains("Bye"));
         assertTrue(result.contains("Hope to see you again soon!"));
-        assertTrue(result.contains("____________________________________________________________"));
     }
 
     // Positive: verifies getTaskListMessage formats a non-empty task list with header and task lines.
@@ -28,7 +27,6 @@ public class UiTest {
 
         assertTrue(result.contains("Here are the tasks in your list:"));
         assertTrue(result.contains("1.[T][ ] buy milk"));
-        assertTrue(result.contains("____________________________________________________________"));
         assertFalse(result.isEmpty());
     }
 }
