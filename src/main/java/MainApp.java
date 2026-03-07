@@ -2,9 +2,9 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
@@ -28,7 +28,8 @@ public class MainApp extends Application {
         try {
             java.net.URL resource = MainApp.class.getResource("/view/HomePage.fxml");
             if (resource == null) {
-                showErrorAlert("Missing resource", "Cannot find HomePage.fxml. Check that the file exists in src/main/resources/view/.");
+                showErrorAlert("Missing resource",
+                    "Cannot find HomePage.fxml. Check that the file exists in src/main/resources/view/.");
                 return;
             }
             FXMLLoader fxmlLoader = new FXMLLoader(resource);

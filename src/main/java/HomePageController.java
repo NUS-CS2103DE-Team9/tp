@@ -4,8 +4,7 @@ import javafx.scene.control.ComboBox;
 /**
  * Controller for the home page: user selection and Enter to open chat.
  */
-public class
-HomePageController {
+public class HomePageController {
 
     private static final String[] USER_NAMES = {
         "Obi-Wan Kenobi",

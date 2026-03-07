@@ -15,6 +15,17 @@ import java.util.List;
 public class Storage {
     private static final Path DATA_ROOT = Paths.get("data");
     private static final String LEGACY_USER_FOLDER = "Obi-Wan_Kenobi";
+    private static final String[] CHEER_QUOTES = {
+        "Do. Or do not. There is no try.",
+        "Patience you must have my young Padawan.",
+        "Train yourself to let go of everything you fear to lose.",
+        "Always pass on what you have learned.",
+        "Feel the force!",
+        "A Jedi uses the Force for knowledge and defense, never for attack.",
+        "Difficult to see. Always in motion is the future.",
+        "Fear is the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering.",
+        "Your path you must decide."
+    };
 
     private final Path dataFolderPath;
     private final Path dataFilePath;
@@ -150,18 +161,6 @@ public class Storage {
             System.out.println("OOPS!!! I couldn't save data: " + e.getMessage());
         }
     }
-
-    private static final String[] CHEER_QUOTES = {
-        "Do. Or do not. There is no try.",
-        "Patience you must have my young Padawan.",
-        "Train yourself to let go of everything you fear to lose.",
-        "Always pass on what you have learned.",
-        "Feel the force!",
-        "A Jedi uses the Force for knowledge and defense, never for attack.",
-        "Difficult to see. Always in motion is the future.",
-        "Fear is the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering.",
-        "Your path you must decide."
-    };
 
     /** Returns a random cheer quote from the fixed list of nine messages. */
     public String getRandomCheerQuote() {
