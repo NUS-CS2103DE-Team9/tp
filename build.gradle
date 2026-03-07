@@ -44,7 +44,7 @@ test {
 }
 
 shadowJar {
-    archiveBaseName = "xmoke"
+    archiveBaseName = "XMOKE"
     archiveClassifier = null
     manifest {
         attributes 'Main-Class': 'Launcher'
