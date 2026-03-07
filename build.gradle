@@ -68,4 +68,3 @@ tasks.withType(JavaExec).configureEach { JavaExec task ->
         task.jvmArgs += ['--add-modules', 'javafx.controls,javafx.fxml,javafx.graphics']
     }
 }
-

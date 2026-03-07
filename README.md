@@ -1,6 +1,6 @@
 # XMOKE — Jedi Training Task Manager
 
-*"How may I help you, my young padawan?"*
+> *"How may I help you, my young padawan?"*
 
 **XMOKE** is a desktop task manager set in the world of **Star Wars**. It is used by Jedi Masters in training to report their duties and missions to **Master Yoda**, the oldest and wisest Jedi Master, who oversees all padawan training. The app is named after **XMOKE**, the legendary Jedi god of focus and discipline.
 
@@ -17,7 +17,7 @@ You take on the role of one of four Jedi Masters:
 - **Qui-Gon Jinn** — The maverick who defied the Council and discovered the Chosen One.
 - **Luke Skywalker** — The hope of the Rebellion and the last of the Jedi.
 
-When you open the app, you choose which Master you are. You then enter the training chamber and speak with **Master Yoda** (the chatbot). He greets you with *"How may I help you, my young padawan?"* and keeps a record of everything you report: tasks, deadlines, events, and progress. Each Master has **their own separate record**—Obi-Wan’s tasks are not the same as Luke’s. When you ask for wisdom, Yoda may reply with a famous Jedi saying. When you are done, you bid him farewell and leave the chamber.
+When you open the app, you choose which Master you are. You then enter the training chamber and speak with **Master Yoda**. He greets you with *"How may I help you, my young padawan?"* and keeps a record of everything you report: tasks, deadlines, events, and progress. Each Master has **their own separate record**—Obi-Wan’s tasks are not the same as Luke’s. When you ask for wisdom, Yoda may reply with a famous Jedi saying. When you are done, you bid him farewell and leave the chamber.
 
 ---
 
@@ -55,11 +55,14 @@ These are the **commands** (messages) the app understands. You type them in the 
 
 If you type something Yoda doesn’t understand, he will tell you he doesn’t know that command.
 
+See also the [User Guide](docs/README.md) for more details.
+
 ---
 
 ## Prerequisites
 
-- **JDK 21**
+- [x] **JDK 21** installed
+- [ ] Project opened in IntelliJ (or another IDE)
 
 ---
 
@@ -73,7 +76,8 @@ If you type something Yoda doesn’t understand, he will tell you he doesn’t k
 3. Configure the project to use **JDK 21**: [Set up JDK in IntelliJ](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk). Set **Project language level** to **SDK default**.
 4. To run the app: run **MainApp** (in `src/main/java/MainApp.java`) — e.g. right-click `MainApp.java` and choose **Run 'MainApp.main()'**, or run the Gradle task **run** (e.g. `.\gradlew run`). A window titled **XMOKE** will open; choose your Jedi, click **Enter**, then chat with Master Yoda in the text box and press Enter or click **Send**.
 
-**Note:** Keep the `src/main/java` folder as the root for Java source files so that tools like Gradle can find them.
+> [!NOTE]
+> Keep the `src/main/java` folder as the root for Java source files so that tools like Gradle can find them.
 
 ---
 
