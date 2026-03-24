@@ -1,13 +1,21 @@
 package xmoke;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Entry point of the XMOKE chatbot application.
  * Handles the program startup flow and delegates user interactions to other components.
  */
 public class Xmoke {
+    private static final List<String> FIXED_ROUTINE_ITEMS = Arrays.asList(
+            "breakfast", "lunch", "dinner", "medication1", "medication2");
+
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
@@ -29,187 +37,66 @@ public class Xmoke {
     /**
      * Generates a response for the given user input.
      * Used by the GUI to get a single reply for a single message.
-     * Command order below matters: more specific patterns (e.g. "delete 1") are checked
-     * before generic ones (e.g. "delete").
+     * Command order below matters: specific command patterns are checked before fallback errors.
      *
      * @param input The user's input string.
      * @return The response string to display.
      */
     public String getResponse(String input) {
-        // --- bye: exit greeting (GUI uses this; CLI exits in run() loop) ---
-        if (input.trim().equalsIgnoreCase("bye")) {
+        String trimmedInput = input.trim();
+        if (trimmedInput.equalsIgnoreCase("bye")) {
             return ui.getGoodbyeMessage();
         }
 
-        // --- list: show all tasks ---
-        if (input.equals("list")) {
-            return ui.getTaskListMessage(tasks);
+        if (trimmedInput.startsWith("record ")) {
+            return handleRecord(trimmedInput);
         }
 
-        // --- sort: sort tasks by deadline, then save and show updated list ---
-        if (input.trim().equalsIgnoreCase("sort")) {
-            tasks.sortByDeadline();
-            storage.saveTasks(tasks);
-            return ui.getSortSuccessMessage() + ui.getTaskListMessage(tasks);
+        if (trimmedInput.equals("record")) {
+            return ui.getErrorMessage("OOPS!!! Please provide a fixed routine item to record.");
         }
 
-        // --- cheer: show a random motivational quote from storage ---
-        if (input.trim().equals("cheer")) {
-            return ui.getCheerMessage(storage.getRandomCheerQuote());
+        if (trimmedInput.startsWith("skip ")) {
+            return handleSkip(trimmedInput);
         }
 
-        // --- delete: require "delete <number>"; bare "delete" is an error ---
-        if (input.trim().equals("delete")) {
-            return ui.getErrorMessage("OOPS!!! Please provide a task number to delete.");
+        if (trimmedInput.equals("skip")) {
+            return ui.getErrorMessage("OOPS!!! Please provide a fixed routine item to skip.");
         }
 
-        if (input.trim().startsWith("delete ")) {
-            try {
-                int index = Parser.parseTaskIndex(
-                        input.trim().substring("delete ".length()), tasks.size());
-                Task deletedTask = tasks.deleteTask(index);
-                storage.saveTasks(tasks);
-                return ui.getTaskDeletedMessage(deletedTask, tasks.size());
-            } catch (NumberFormatException e) {
-                return ui.getErrorMessage("OOPS!!! Please provide a valid task number.");
-            } catch (IndexOutOfBoundsException e) {
-                return ui.getErrorMessage("OOPS!!! That task number is out of range.");
-            }
+        if (trimmedInput.startsWith("symptom ")) {
+            return handleSymptom(trimmedInput);
         }
 
-        // --- find: search tasks by keyword; "find <keyword>" ---
-        if (input.trim().equals("find")) {
-            return ui.getErrorMessage("OOPS!!! Please provide a keyword to find.");
+        if (trimmedInput.equals("symptom")) {
+            return ui.getErrorMessage("OOPS!!! Please provide symptom description and severity 1-10.");
         }
 
-        if (input.trim().startsWith("find ")) {
-            String keyword = input.trim().substring("find ".length()).trim();
-            if (keyword.isEmpty()) {
-                return ui.getErrorMessage("OOPS!!! Please provide a keyword to find.");
-            }
-            return ui.getFoundTasksMessage(tasks.findTasks(keyword));
+        if (trimmedInput.startsWith("exercise ")) {
+            return handleExercise(trimmedInput);
         }
 
-        // --- mark: mark task as done; "mark <number>" ---
-        if (input.trim().equals("mark")) {
-            return ui.getErrorMessage("OOPS!!! Please provide a task number to mark.");
+        if (trimmedInput.equals("exercise")) {
+            return ui.getErrorMessage("OOPS!!! Please provide an exercise description.");
         }
 
-        if (input.trim().startsWith("mark ")) {
-            try {
-                int index = Parser.parseTaskIndex(
-                        input.trim().substring("mark ".length()), tasks.size());
-                tasks.markTask(index);
-                storage.saveTasks(tasks);
-                return ui.getTaskMarkedMessage(tasks.getTask(index));
-            } catch (NumberFormatException e) {
-                return ui.getErrorMessage("OOPS!!! Please provide a valid task number.");
-            } catch (IndexOutOfBoundsException e) {
-                return ui.getErrorMessage("OOPS!!! That task number is out of range.");
-            }
+        if (trimmedInput.startsWith("note ")) {
+            return handleNote(trimmedInput);
         }
 
-        // --- unmark: mark task as not done; "unmark <number>" ---
-        if (input.trim().equals("unmark")) {
-            return ui.getErrorMessage("OOPS!!! Please provide a task number to unmark.");
+        if (trimmedInput.equals("note")) {
+            return ui.getErrorMessage("OOPS!!! Please provide a note description.");
         }
 
-        if (input.trim().startsWith("unmark ")) {
-            try {
-                int index = Parser.parseTaskIndex(
-                        input.trim().substring("unmark ".length()), tasks.size());
-                tasks.unmarkTask(index);
-                storage.saveTasks(tasks);
-                return ui.getTaskUnmarkedMessage(tasks.getTask(index));
-            } catch (NumberFormatException e) {
-                return ui.getErrorMessage("OOPS!!! Please provide a valid task number.");
-            } catch (IndexOutOfBoundsException e) {
-                return ui.getErrorMessage("OOPS!!! That task number is out of range.");
-            }
+        if (trimmedInput.startsWith("deadline ")) {
+            return handleHealthDeadline(trimmedInput);
         }
 
-        // --- capacity check: no new tasks if list is full ---
-        if (tasks.isFull()) {
-            return ui.getErrorMessage("I can't take it anymore!");
+        if (trimmedInput.equals("list")) {
+            return buildTodayHealthList();
         }
 
-        // --- todo: add a todo task; "todo <description>" ---
-        if (input.trim().equals("todo")) {
-            return ui.getErrorMessage("OOPS!!! The description of a todo cannot be empty.");
-        }
-
-        if (input.trim().startsWith("todo ")) {
-            String description = input.trim().substring("todo ".length()).trim();
-            if (description.isEmpty()) {
-                return ui.getErrorMessage("OOPS!!! The description of a todo cannot be empty.");
-            }
-            Task task = new Task(description, Task.TaskType.T);
-            tasks.addTask(task);
-            storage.saveTasks(tasks);
-            return ui.getTaskAddedMessage(task, tasks.size());
-        }
-
-        // --- deadline: add a deadline task; "deadline <description> /by <date time>" ---
-        if (input.trim().startsWith("deadline ")) {
-            String remainder = input.trim().substring("deadline ".length()).trim();
-            String[] parts = remainder.split(" /by ", 2);
-            if (parts.length < 2) {
-                return ui.getErrorMessage("OOPS!!! A deadline must have /by followed by a date/time.");
-            }
-
-            String description = parts[0].trim();
-            String dateTimeStr = parts[1].trim();
-
-            try {
-                LocalDateTime dateTime = Parser.parseDateTime(dateTimeStr);
-                Task task = new Task(description, Task.TaskType.D, dateTime);
-                tasks.addTask(task);
-                storage.saveTasks(tasks);
-                return ui.getTaskAddedMessage(task, tasks.size());
-            } catch (DateTimeParseException e) {
-                return ui.getErrorMessage("OOPS!!! Invalid date/time format. Use yyyy-MM-dd HHmm or d/M/yyyy HHmm");
-            }
-        }
-
-        // --- event: add an event with start/end; "event <description> /from <date time> /to <date time>" ---
-        if (input.trim().startsWith("event ")) {
-            String remainder = input.trim().substring("event ".length()).trim();
-            String[] firstSplit = remainder.split(" /from ", 2);
-
-            if (firstSplit.length < 2) {
-                return ui.getErrorMessage("OOPS!!! An event must have /from and /to.");
-            }
-
-            String descriptionPart = firstSplit[0].trim();
-            String[] secondSplit = firstSplit[1].split(" /to ", 2);
-
-            if (secondSplit.length < 2) {
-                return ui.getErrorMessage("OOPS!!! An event must have /to.");
-            }
-
-            String fromTimeStr = secondSplit[0].trim();
-            String toTimeStr = secondSplit[1].trim();
-
-            if (descriptionPart.isEmpty() || fromTimeStr.isEmpty() || toTimeStr.isEmpty()) {
-                return ui.getErrorMessage("OOPS!!! The description/from/to of an event cannot be empty.");
-            }
-
-            try {
-                LocalDateTime fromTime = Parser.parseDateTime(fromTimeStr);
-                LocalDateTime toTime = Parser.parseDateTime(toTimeStr);
-
-                String description = descriptionPart + " (from: " + fromTimeStr + "; to: " + toTimeStr + ")";
-                Task task = new Task(description, Task.TaskType.E, fromTime);
-                tasks.addTask(task);
-                storage.saveTasks(tasks);
-                return ui.getTaskAddedMessage(task, tasks.size());
-            } catch (DateTimeParseException e) {
-                return ui.getErrorMessage("OOPS!!! Invalid date/time format. Use yyyy-MM-dd HHmm or d/M/yyyy HHmm");
-            }
-        }
-
-        // --- unknown command ---
-        return ui.getErrorMessage("OOPS!!! I'm sorry, but I don't know what that means :-(");
+        return ui.getErrorMessage("OOPS!!! Unknown command. Use record/skip/symptom/exercise/note/deadline/list/bye.");
     }
 
     /**
@@ -222,192 +109,10 @@ public class Xmoke {
 
         while (true) {
             String input = ui.readCommand();
-
+            System.out.print(getResponse(input));
             if (input.trim().equalsIgnoreCase("bye")) {
-                ui.showGoodbye();
                 break;
             }
-
-            if (input.equals("list")) {
-                ui.showTaskList(tasks);
-                continue;
-            }
-
-            if (input.trim().equalsIgnoreCase("sort")) {
-                tasks.sortByDeadline();
-                storage.saveTasks(tasks);
-                ui.showSortSuccess();
-                ui.showTaskList(tasks);
-                continue;
-            }
-
-            if (input.trim().equals("cheer")) {
-                ui.showCheer(storage.getRandomCheerQuote());
-                continue;
-            }
-
-            if (input.trim().equals("delete")) {
-                ui.showError("OOPS!!! Please provide a task number to delete.");
-                continue;
-            }
-
-            if (input.trim().startsWith("delete ")) {
-                try {
-                    int index = Parser.parseTaskIndex(
-                            input.trim().substring("delete ".length()), tasks.size());
-                    Task deletedTask = tasks.deleteTask(index);
-                    storage.saveTasks(tasks);
-                    ui.showTaskDeleted(deletedTask, tasks.size());
-                } catch (NumberFormatException e) {
-                    ui.showError("OOPS!!! Please provide a valid task number.");
-                } catch (IndexOutOfBoundsException e) {
-                    ui.showError("OOPS!!! That task number is out of range.");
-                }
-                continue;
-            }
-
-            if (input.trim().equals("find")) {
-                ui.showError("OOPS!!! Please provide a keyword to find.");
-                continue;
-            }
-
-            if (input.trim().startsWith("find ")) {
-                String keyword = input.trim().substring("find ".length()).trim();
-                if (keyword.isEmpty()) {
-                    ui.showError("OOPS!!! Please provide a keyword to find.");
-                    continue;
-                }
-                ui.showFoundTasks(tasks.findTasks(keyword));
-                continue;
-            }
-
-            if (input.trim().equals("mark")) {
-                ui.showError("OOPS!!! Please provide a task number to mark.");
-                continue;
-            }
-
-            if (input.trim().startsWith("mark ")) {
-                try {
-                    int index = Parser.parseTaskIndex(
-                            input.trim().substring("mark ".length()), tasks.size());
-                    tasks.markTask(index);
-                    storage.saveTasks(tasks);
-                    ui.showTaskMarked(tasks.getTask(index));
-                } catch (NumberFormatException e) {
-                    ui.showError("OOPS!!! Please provide a valid task number.");
-                } catch (IndexOutOfBoundsException e) {
-                    ui.showError("OOPS!!! That task number is out of range.");
-                }
-                continue;
-            }
-
-            if (input.trim().equals("unmark")) {
-                ui.showError("OOPS!!! Please provide a task number to unmark.");
-                continue;
-            }
-
-            if (input.trim().startsWith("unmark ")) {
-                try {
-                    int index = Parser.parseTaskIndex(
-                            input.trim().substring("unmark ".length()), tasks.size());
-                    tasks.unmarkTask(index);
-                    storage.saveTasks(tasks);
-                    ui.showTaskUnmarked(tasks.getTask(index));
-                } catch (NumberFormatException e) {
-                    ui.showError("OOPS!!! Please provide a valid task number.");
-                } catch (IndexOutOfBoundsException e) {
-                    ui.showError("OOPS!!! That task number is out of range.");
-                }
-                continue;
-            }
-
-            if (tasks.isFull()) {
-                ui.showError("I can't take it anymore!");
-                continue;
-            }
-
-            if (input.trim().equals("todo")) {
-                ui.showError("OOPS!!! The description of a todo cannot be empty.");
-                continue;
-            }
-
-            if (input.trim().startsWith("todo ")) {
-                String description = input.trim().substring("todo ".length()).trim();
-                if (description.isEmpty()) {
-                    ui.showError("OOPS!!! The description of a todo cannot be empty.");
-                    continue;
-                }
-                Task task = new Task(description, Task.TaskType.T);
-                tasks.addTask(task);
-                storage.saveTasks(tasks);
-                ui.showTaskAdded(task, tasks.size());
-                continue;
-            }
-
-            if (input.trim().startsWith("deadline ")) {
-                String remainder = input.trim().substring("deadline ".length()).trim();
-                String[] parts = remainder.split(" /by ", 2);
-                if (parts.length < 2) {
-                    ui.showError("OOPS!!! A deadline must have /by followed by a date/time.");
-                    continue;
-                }
-
-                String description = parts[0].trim();
-                String dateTimeStr = parts[1].trim();
-
-                try {
-                    LocalDateTime dateTime = Parser.parseDateTime(dateTimeStr);
-                    Task task = new Task(description, Task.TaskType.D, dateTime);
-                    tasks.addTask(task);
-                    storage.saveTasks(tasks);
-                    ui.showTaskAdded(task, tasks.size());
-                } catch (DateTimeParseException e) {
-                    ui.showError("OOPS!!! Invalid date/time format. Use yyyy-MM-dd HHmm or d/M/yyyy HHmm");
-                }
-                continue;
-            }
-
-            if (input.trim().startsWith("event ")) {
-                String remainder = input.trim().substring("event ".length()).trim();
-                String[] firstSplit = remainder.split(" /from ", 2);
-
-                if (firstSplit.length < 2) {
-                    ui.showError("OOPS!!! An event must have /from and /to.");
-                    continue;
-                }
-
-                String descriptionPart = firstSplit[0].trim();
-                String[] secondSplit = firstSplit[1].split(" /to ", 2);
-
-                if (secondSplit.length < 2) {
-                    ui.showError("OOPS!!! An event must have /to.");
-                    continue;
-                }
-
-                String fromTimeStr = secondSplit[0].trim();
-                String toTimeStr = secondSplit[1].trim();
-
-                if (descriptionPart.isEmpty() || fromTimeStr.isEmpty() || toTimeStr.isEmpty()) {
-                    ui.showError("OOPS!!! The description/from/to of an event cannot be empty.");
-                    continue;
-                }
-
-                try {
-                    LocalDateTime fromTime = Parser.parseDateTime(fromTimeStr);
-                    LocalDateTime toTime = Parser.parseDateTime(toTimeStr);
-
-                    String description = descriptionPart + " (from: " + fromTimeStr + "; to: " + toTimeStr + ")";
-                    Task task = new Task(description, Task.TaskType.E, fromTime);
-                    tasks.addTask(task);
-                    storage.saveTasks(tasks);
-                    ui.showTaskAdded(task, tasks.size());
-                } catch (DateTimeParseException e) {
-                    ui.showError("OOPS!!! Invalid date/time format. Use yyyy-MM-dd HHmm or d/M/yyyy HHmm");
-                }
-                continue;
-            }
-
-            ui.showError("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
 
         ui.close();
@@ -421,5 +126,214 @@ public class Xmoke {
 
     public static void main(String... args) {
         new Xmoke().run();
+    }
+
+    private String handleRecord(String input) {
+        String remainder = input.substring("record ".length()).trim();
+        if (remainder.isEmpty()) {
+            return ui.getErrorMessage("OOPS!!! Please provide a fixed routine item to record.");
+        }
+        String[] parts = remainder.split("\\s+", 2);
+        String item = parts[0].toLowerCase();
+        String note = parts.length > 1 ? parts[1].trim() : "";
+        if (!FIXED_ROUTINE_ITEMS.contains(item)) {
+            return ui.getErrorMessage("OOPS!!! Unknown fixed item. Use breakfast/lunch/dinner/medication1/medication2.");
+        }
+        removeExistingRoutineStatusForToday(item);
+        String payload = "ROUTINE|" + item + "|DONE|" + note;
+        tasks.addTask(new Task(payload, Task.TaskType.T, LocalDateTime.now()));
+        storage.saveTasks(tasks);
+        String noteMsg = note.isEmpty() ? "" : " Note: " + note;
+        return ui.getErrorMessage("Recorded " + item + " as done." + noteMsg);
+    }
+
+    private String handleSkip(String input) {
+        String remainder = input.substring("skip ".length()).trim();
+        if (remainder.isEmpty()) {
+            return ui.getErrorMessage("OOPS!!! Please provide a fixed routine item to skip.");
+        }
+        String[] parts = remainder.split("\\s+", 2);
+        String item = parts[0].toLowerCase();
+        String reason = parts.length > 1 ? parts[1].trim() : "";
+        if (!FIXED_ROUTINE_ITEMS.contains(item)) {
+            return ui.getErrorMessage("OOPS!!! Unknown fixed item. Use breakfast/lunch/dinner/medication1/medication2.");
+        }
+        removeExistingRoutineStatusForToday(item);
+        String payload = "ROUTINE|" + item + "|SKIPPED|" + reason;
+        tasks.addTask(new Task(payload, Task.TaskType.T, LocalDateTime.now()));
+        storage.saveTasks(tasks);
+        String reasonMsg = reason.isEmpty() ? "" : " Reason: " + reason;
+        return ui.getErrorMessage("Recorded " + item + " as skipped." + reasonMsg);
+    }
+
+    private String handleSymptom(String input) {
+        String remainder = input.substring("symptom ".length()).trim();
+        String[] parts = remainder.split("\\s+");
+        if (parts.length < 2) {
+            return ui.getErrorMessage("OOPS!!! Please provide symptom description and severity 1-10.");
+        }
+        String severityText = parts[parts.length - 1];
+        int severity;
+        try {
+            severity = Integer.parseInt(severityText);
+        } catch (NumberFormatException e) {
+            return ui.getErrorMessage("OOPS!!! Symptom severity must be an integer from 1 to 10.");
+        }
+        if (severity < 1 || severity > 10) {
+            return ui.getErrorMessage("OOPS!!! Symptom severity must be an integer from 1 to 10.");
+        }
+        String description = remainder.substring(0, remainder.length() - severityText.length()).trim();
+        if (description.isEmpty()) {
+            return ui.getErrorMessage("OOPS!!! Symptom description cannot be empty.");
+        }
+        String payload = "SYMPTOM|" + severity + "|" + description;
+        tasks.addTask(new Task(payload, Task.TaskType.T, LocalDateTime.now()));
+        storage.saveTasks(tasks);
+        return ui.getErrorMessage("Symptom saved: " + description + " (severity " + severity + ").");
+    }
+
+    private String handleExercise(String input) {
+        String description = input.substring("exercise ".length()).trim();
+        if (description.isEmpty()) {
+            return ui.getErrorMessage("OOPS!!! Please provide an exercise description.");
+        }
+        String payload = "EXERCISE|" + description;
+        tasks.addTask(new Task(payload, Task.TaskType.T, LocalDateTime.now()));
+        storage.saveTasks(tasks);
+        return ui.getErrorMessage("Exercise saved: " + description);
+    }
+
+    private String handleNote(String input) {
+        String text = input.substring("note ".length()).trim();
+        if (text.isEmpty()) {
+            return ui.getErrorMessage("OOPS!!! Please provide a note description.");
+        }
+        String payload = "NOTE|" + text;
+        tasks.addTask(new Task(payload, Task.TaskType.T, LocalDateTime.now()));
+        storage.saveTasks(tasks);
+        return ui.getErrorMessage("Note saved.");
+    }
+
+    private String handleHealthDeadline(String input) {
+        String remainder = input.substring("deadline ".length()).trim();
+        if (remainder.isEmpty()) {
+            return ui.getErrorMessage("OOPS!!! Deadline needs description and time.");
+        }
+        String description;
+        String dateTimeText;
+        if (remainder.contains(" /by ")) {
+            String[] parts = remainder.split(" /by ", 2);
+            description = parts[0].trim();
+            dateTimeText = parts.length > 1 ? parts[1].trim() : "";
+        } else {
+            String[] parsed = splitDescriptionAndDateTime(remainder);
+            if (parsed == null) {
+                return ui.getErrorMessage("OOPS!!! Deadline needs description and valid time.");
+            }
+            description = parsed[0];
+            dateTimeText = parsed[1];
+        }
+        if (description.isEmpty() || dateTimeText.isEmpty()) {
+            return ui.getErrorMessage("OOPS!!! Deadline needs description and valid time.");
+        }
+        try {
+            LocalDateTime dueAt = Parser.parseDateTime(dateTimeText);
+            String payload = "DEADLINE|" + description;
+            tasks.addTask(new Task(payload, Task.TaskType.D, dueAt));
+            storage.saveTasks(tasks);
+            return ui.getErrorMessage("Deadline saved: " + description);
+        } catch (DateTimeParseException e) {
+            return ui.getErrorMessage("OOPS!!! Invalid date/time format.");
+        }
+    }
+
+    private String[] splitDescriptionAndDateTime(String text) {
+        String[] tokens = text.split("\\s+");
+        for (int i = 1; i < tokens.length; i++) {
+            String description = String.join(" ", Arrays.copyOfRange(tokens, 0, i)).trim();
+            String dateTimeText = String.join(" ", Arrays.copyOfRange(tokens, i, tokens.length)).trim();
+            if (description.isEmpty() || dateTimeText.isEmpty()) {
+                continue;
+            }
+            try {
+                Parser.parseDateTime(dateTimeText);
+                return new String[] {description, dateTimeText};
+            } catch (DateTimeParseException e) {
+                // try next split
+            }
+        }
+        return null;
+    }
+
+    private void removeExistingRoutineStatusForToday(String item) {
+        LocalDate today = LocalDate.now();
+        Iterator<Task> iterator = tasks.getAllTasks().iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            if (task.getDateTime() == null || !task.getDateTime().toLocalDate().equals(today)) {
+                continue;
+            }
+            String desc = task.getDescription();
+            if (desc.startsWith("ROUTINE|" + item + "|")) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private String buildTodayHealthList() {
+        LocalDate today = LocalDate.now();
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nToday's routine status:\n");
+        for (String item : FIXED_ROUTINE_ITEMS) {
+            String status = "[ ]";
+            String stateLabel = "";
+            String detail = "";
+            for (Task task : tasks.getAllTasks()) {
+                if (task.getDateTime() == null || !task.getDateTime().toLocalDate().equals(today)) {
+                    continue;
+                }
+                String desc = task.getDescription();
+                if (!desc.startsWith("ROUTINE|" + item + "|")) {
+                    continue;
+                }
+                String[] parts = desc.split("\\|", 4);
+                String state = parts.length > 2 ? parts[2] : "";
+                detail = parts.length > 3 ? parts[3] : "";
+                if ("DONE".equals(state)) {
+                    status = "[X]";
+                    stateLabel = "";
+                } else {
+                    status = "[ ]";
+                    stateLabel = " (skipped)";
+                }
+            }
+            sb.append(status).append(" ").append(item).append(stateLabel);
+            if (!detail.isBlank()) {
+                sb.append(" - ").append(detail);
+            }
+            sb.append("\n");
+        }
+
+        List<Task> todayDeadlines = new ArrayList<>();
+        for (Task task : tasks.getAllTasks()) {
+            if (task.getType() == Task.TaskType.D && task.getDateTime() != null
+                    && task.getDateTime().toLocalDate().equals(today)) {
+                todayDeadlines.add(task);
+            }
+        }
+        sb.append("\nToday's deadlines:\n");
+        if (todayDeadlines.isEmpty()) {
+            sb.append("(none)\n");
+        } else {
+            for (Task deadline : todayDeadlines) {
+                String description = deadline.getDescription();
+                if (description.startsWith("DEADLINE|")) {
+                    description = description.substring("DEADLINE|".length());
+                }
+                sb.append("- ").append(description)
+                        .append(" (by: ").append(deadline.getDateTime()).append(")\n");
+            }
+        }
+        return sb.toString();
     }
 }

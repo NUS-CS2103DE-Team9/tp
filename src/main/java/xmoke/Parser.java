@@ -49,6 +49,48 @@ public class Parser {
         dateTimeStr = dateTimeStr.trim();
 
         try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            return LocalDateTime.parse(dateTimeStr, formatter);
+        } catch (DateTimeParseException e) {
+            // Try the next format.
+        }
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mma");
+            return LocalDateTime.parse(dateTimeStr.toUpperCase(), formatter);
+        } catch (DateTimeParseException e) {
+            // Try the next format.
+        }
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy h:mma");
+            return LocalDateTime.parse(dateTimeStr.toUpperCase(), formatter);
+        } catch (DateTimeParseException e) {
+            // Try the next format.
+        }
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HH:mm");
+            return LocalDateTime.parse(dateTimeStr, formatter);
+        } catch (DateTimeParseException e) {
+            // Try the next format.
+        }
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mma");
+            return LocalDate.now().atTime(java.time.LocalTime.parse(dateTimeStr.toUpperCase(), formatter));
+        } catch (DateTimeParseException e) {
+            // Try the next format.
+        }
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            return LocalDate.now().atTime(java.time.LocalTime.parse(dateTimeStr, formatter));
+        } catch (DateTimeParseException e) {
+            // Try the next format.
+        }
+
+        try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
             return LocalDateTime.parse(dateTimeStr, formatter);
         } catch (DateTimeParseException e) {

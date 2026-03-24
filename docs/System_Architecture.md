@@ -23,8 +23,6 @@ The component architecture separates UI classes, controllers/parsers, business s
 
 **Figure 2.** Component-level architecture with presentation, controller, service, and repository layers.
 
-![Component Architecture](Component.png)
-
 | Layer | Responsibilities |
 |---|---|
 | Presentation | Main page, patient view, caregiver view, command box, today list, weekly summary screen. |
@@ -47,8 +45,6 @@ Because the product is a desktop application, deployment is intentionally simple
 The sequence below shows a typical workflow in which a patient records a medication entry and then requests the list view for today's tasks.
 
 **Figure 4.** Sequence for record + list workflow.
-
-![Sequence Diagram](Sequence.png)
 
 ---
 
