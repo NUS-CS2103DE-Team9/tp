@@ -195,7 +195,7 @@ Builds the output shown for the `list` command. Combines routine states and pend
 |---|---|---|
 | `date` | `LocalDate` | Target day. |
 
-**Return value:** `TodayListView` containing fixed tasks, statuses shown as `[X]` or `[ ]`, notes/reasons, and today's deadlines.  
+**Return value:** `TodayListView` containing fixed tasks, statuses shown as `[X]` / `[ ]`, notes/reasons, and today's deadlines.  
 **Example usage:** `buildTodayList(today)`
 
 ---
