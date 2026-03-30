@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -7,8 +9,9 @@ import xmoke.Storage;
 import xmoke.Task;
 import xmoke.User;
 
-import java.time.LocalDate;
-
+/**
+ * Controller for the senior tasks view.
+ */
 public class SeniorTasksController {
     @FXML
     private Label pageTitleLabel;
@@ -36,17 +39,30 @@ public class SeniorTasksController {
     private String userName;
     private User user;
 
+    /**
+     * Sets the main application reference and storage reference.
+     *
+     * @param mainApp Main application instance.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         this.storage = mainApp.getStorage();
     }
 
+    /**
+     * Sets the user name and loads the corresponding user data.
+     *
+     * @param userName Name of the user.
+     */
     public void setUserName(String userName) {
         this.userName = userName;
         this.user = storage.loadUser(userName);
         refreshView();
     }
 
+    /**
+     * Refreshes the displayed daily and weekly tasks.
+     */
     private void refreshView() {
         pageTitleLabel.setText("Today's Tasks");
         userLabel.setText(userName);
@@ -99,11 +115,17 @@ public class SeniorTasksController {
         storage.saveUser(user);
     }
 
+    /**
+     * Opens the senior log scene.
+     */
     @FXML
     private void handleGoToLog() {
         mainApp.showSeniorLogScene(userName);
     }
 
+    /**
+     * Returns the user to the login scene.
+     */
     @FXML
     private void handleBack() {
         mainApp.showLoginScene();

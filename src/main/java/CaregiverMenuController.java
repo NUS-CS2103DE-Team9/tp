@@ -1,31 +1,51 @@
+import java.util.Optional;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 
-import java.util.Optional;
-
+/**
+ * Controller for the caregiver menu view.
+ */
 public class CaregiverMenuController {
     private MainApp mainApp;
 
+    /**
+     * Sets the main application reference for scene switching and storage access.
+     *
+     * @param mainApp Main application instance.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
+    /**
+     * Opens the user selection scene for editing routines.
+     */
     @FXML
     private void handleEditRoutine() {
         mainApp.showCaregiverSelectUserScene("edit");
     }
 
+    /**
+     * Opens the history period selection scene.
+     */
     @FXML
     private void handleViewHistory() {
         mainApp.showHistoryPeriodScene();
     }
 
+    /**
+     * Opens the summary generation user selection scene.
+     */
     @FXML
     private void handleGenerateSummary() {
         mainApp.showGenerateSummarySelectUserScene();
     }
 
+    /**
+     * Handles adding a new user.
+     */
     @FXML
     private void handleAddUser() {
         TextInputDialog dialog = new TextInputDialog();
@@ -52,6 +72,9 @@ public class CaregiverMenuController {
         }
     }
 
+    /**
+     * Handles changing the caregiver password.
+     */
     @FXML
     private void handleChangePassword() {
         TextInputDialog oldDialog = new TextInputDialog();
@@ -83,11 +106,20 @@ public class CaregiverMenuController {
         }
     }
 
+    /**
+     * Returns the user to the login scene.
+     */
     @FXML
     private void handleBack() {
         mainApp.showLoginScene();
     }
 
+    /**
+     * Shows an information alert with the given title and message.
+     *
+     * @param title Title of the alert.
+     * @param message Message to display.
+     */
     private void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

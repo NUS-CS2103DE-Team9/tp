@@ -1,9 +1,12 @@
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
-import java.util.List;
-
+/**
+ * Controller for the history user selection view.
+ */
 public class HistorySelectUserController {
     @FXML
     private VBox userContainer;
@@ -11,15 +14,28 @@ public class HistorySelectUserController {
     private MainApp mainApp;
     private String period;
 
+    /**
+     * Sets the main application reference for scene switching.
+     *
+     * @param mainApp Main application instance.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
+    /**
+     * Sets the selected history period and loads the users.
+     *
+     * @param period Selected period (e.g. "week").
+     */
     public void setPeriod(String period) {
         this.period = period;
         loadUsers();
     }
 
+    /**
+     * Loads the list of users and displays them as buttons.
+     */
     private void loadUsers() {
         userContainer.getChildren().clear();
         List<String> users = mainApp.getStorage().listSeniorNames();
@@ -36,6 +52,9 @@ public class HistorySelectUserController {
         }
     }
 
+    /**
+     * Returns the user to the history period selection scene.
+     */
     @FXML
     private void handleBack() {
         mainApp.showHistoryPeriodScene();

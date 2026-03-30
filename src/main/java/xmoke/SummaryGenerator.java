@@ -8,9 +8,18 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Generates summary reports for users.
+ */
 public class SummaryGenerator {
     private static final Path REPORT_ROOT = Paths.get("report");
 
+    /**
+     * Generates a monthly summary report for the given user.
+     *
+     * @param user User to generate the report for.
+     * @return Path to the generated report.
+     */
     public Path generateMonthlySummary(User user) {
         try {
             Files.createDirectories(REPORT_ROOT);
@@ -24,14 +33,12 @@ public class SummaryGenerator {
 
             List<String> lines = new ArrayList<>();
 
-            // Header
             lines.add("Report Type,Monthly Summary");
             lines.add("User," + escape(user.getName()));
             lines.add("Period," + startDate + " to " + endDate);
             lines.add("Generated On," + LocalDate.now());
             lines.add("");
 
-            // Summary section
             lines.add("Routine Name,Routine Type,Completed Count,Expected Count,Completion Rate");
 
             for (Task task : user.getDailyRoutines().getAllTasks()) {
@@ -85,7 +92,9 @@ public class SummaryGenerator {
                     cursor = weekEnd.plusDays(1);
                 }
 
-                String rate = weeklyExpected == 0 ? "0%" : (completedWeeks * 100 / weeklyExpected) + "%";
+                String rate = weeklyExpected == 0
+                        ? "0%"
+                        : (completedWeeks * 100 / weeklyExpected) + "%";
                 lines.add(csvRow(
                         task.getDescription(),
                         "WEEKLY",
@@ -105,11 +114,9 @@ public class SummaryGenerator {
                 lines.add(csvRow(date.toString(), log));
             }
 
-            // Detailed completion history section
             lines.add("");
             lines.add("Detailed Completion History");
 
-            // Header row: Task + dates
             List<String> dateHeader = new ArrayList<>();
             dateHeader.add("Task");
             for (int i = 0; i < 30; i++) {
@@ -118,7 +125,6 @@ public class SummaryGenerator {
             }
             lines.add(csvRow(dateHeader.toArray(new String[0])));
 
-            // Daily tasks rows
             for (Task task : user.getDailyRoutines().getAllTasks()) {
                 List<String> row = new ArrayList<>();
                 row.add(task.getDescription() + " (DAILY)");
@@ -134,7 +140,6 @@ public class SummaryGenerator {
                 lines.add(csvRow(row.toArray(new String[0])));
             }
 
-            // Weekly tasks rows
             for (Task task : user.getWeeklyRoutines().getAllTasks()) {
                 List<String> row = new ArrayList<>();
                 row.add(task.getDescription() + " (WEEKLY)");
@@ -150,7 +155,6 @@ public class SummaryGenerator {
                 lines.add(csvRow(row.toArray(new String[0])));
             }
 
-            // Daily log row at bottom
             List<String> logRow = new ArrayList<>();
             logRow.add("Daily Log");
             for (int i = 0; i < 30; i++) {
@@ -167,6 +171,13 @@ public class SummaryGenerator {
         }
     }
 
+    /**
+     * Counts the number of weeks covered in the given date range.
+     *
+     * @param startDate Start date of the range.
+     * @param endDate End date of the range.
+     * @return Number of weeks in the range.
+     */
     private int countWeeksInRange(LocalDate startDate, LocalDate endDate) {
         int count = 0;
         LocalDate cursor = startDate;
@@ -177,6 +188,12 @@ public class SummaryGenerator {
         return count;
     }
 
+    /**
+     * Builds a CSV row from the given values.
+     *
+     * @param values Values to include in the row.
+     * @return CSV-formatted row.
+     */
     private String csvRow(String... values) {
         List<String> escaped = new ArrayList<>();
         for (String value : values) {
@@ -185,6 +202,12 @@ public class SummaryGenerator {
         return String.join(",", escaped);
     }
 
+    /**
+     * Escapes a value for safe inclusion in a CSV file.
+     *
+     * @param value Value to escape.
+     * @return Escaped CSV value.
+     */
     private String escape(String value) {
         if (value == null) {
             return "\"\"";

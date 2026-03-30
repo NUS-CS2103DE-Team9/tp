@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -7,9 +10,9 @@ import xmoke.Storage;
 import xmoke.Task;
 import xmoke.User;
 
-import java.time.LocalDate;
-import java.util.List;
-
+/**
+ * Controller for the today's history view.
+ */
 public class TodayHistoryController {
     @FXML
     private VBox usersContainer;
@@ -17,12 +20,20 @@ public class TodayHistoryController {
     private MainApp mainApp;
     private Storage storage;
 
+    /**
+     * Sets the main application reference and storage reference.
+     *
+     * @param mainApp Main application instance.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         this.storage = mainApp.getStorage();
         loadTodayHistory();
     }
 
+    /**
+     * Loads and displays today's task completion history for all users.
+     */
     private void loadTodayHistory() {
         usersContainer.getChildren().clear();
         List<String> users = storage.listSeniorNames();
@@ -54,6 +65,9 @@ public class TodayHistoryController {
         }
     }
 
+    /**
+     * Returns the user to the history period selection scene.
+     */
     @FXML
     private void handleBack() {
         mainApp.showHistoryPeriodScene();

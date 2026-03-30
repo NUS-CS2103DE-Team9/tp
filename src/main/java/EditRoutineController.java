@@ -1,15 +1,18 @@
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import xmoke.RoutineType;
 import xmoke.Storage;
 import xmoke.Task;
 import xmoke.User;
 
+/**
+ * Controller for the edit routine view.
+ */
 public class EditRoutineController {
     @FXML
     private Label titleLabel;
@@ -25,17 +28,30 @@ public class EditRoutineController {
     private String userName;
     private User user;
 
+    /**
+     * Sets the main application reference and storage reference.
+     *
+     * @param mainApp Main application instance.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         this.storage = mainApp.getStorage();
     }
 
+    /**
+     * Sets the user name and loads the corresponding user data.
+     *
+     * @param userName Name of the selected user.
+     */
     public void setUserName(String userName) {
         this.userName = userName;
         this.user = storage.loadUser(userName);
         refreshView();
     }
 
+    /**
+     * Refreshes the displayed daily and weekly routines.
+     */
     private void refreshView() {
         titleLabel.setText("Tasks for " + userName);
 
@@ -64,6 +80,12 @@ public class EditRoutineController {
         }
     }
 
+    /**
+     * Removes a routine with the given description from the specified routine type.
+     *
+     * @param description Description of the routine to remove.
+     * @param type Type of routine to remove from.
+     */
     private void removeRoutine(String description, RoutineType type) {
         if (type == RoutineType.DAILY) {
             for (int i = 0; i < user.getDailyRoutines().size(); i++) {
@@ -84,16 +106,27 @@ public class EditRoutineController {
         refreshView();
     }
 
+    /**
+     * Handles adding a new daily task.
+     */
     @FXML
     private void handleAddDailyTask() {
         addRoutine(RoutineType.DAILY);
     }
 
+    /**
+     * Handles adding a new weekly task.
+     */
     @FXML
     private void handleAddWeeklyTask() {
         addRoutine(RoutineType.WEEKLY);
     }
 
+    /**
+     * Adds a new routine of the specified type.
+     *
+     * @param type Type of routine to add.
+     */
     private void addRoutine(RoutineType type) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Add Task");
@@ -108,7 +141,10 @@ public class EditRoutineController {
             }
 
             if (routineExists(trimmed, type)) {
-                showInfo("Duplicate task", "This task already exists in the " + type.name().toLowerCase() + " list.");
+                showInfo(
+                        "Duplicate task",
+                        "This task already exists in the " + type.name().toLowerCase() + " list."
+                );
                 return;
             }
 
@@ -123,11 +159,21 @@ public class EditRoutineController {
         });
     }
 
+    /**
+     * Returns the user to the caregiver menu scene.
+     */
     @FXML
     private void handleBack() {
         mainApp.showCaregiverMenuScene();
     }
 
+    /**
+     * Checks whether a routine with the given name already exists.
+     *
+     * @param name Name of the routine.
+     * @param type Type of routine to check.
+     * @return True if the routine already exists, otherwise false.
+     */
     private boolean routineExists(String name, RoutineType type) {
         String trimmed = name.trim();
 
@@ -148,6 +194,12 @@ public class EditRoutineController {
         return false;
     }
 
+    /**
+     * Shows an information alert with the given title and message.
+     *
+     * @param title Title of the alert.
+     * @param message Message to display.
+     */
     private void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -155,5 +207,4 @@ public class EditRoutineController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 }

@@ -10,16 +10,26 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Handles reading and writing of all application data, including users,
+ * routines, daily records, and caregiver credentials.
+ */
 public class Storage {
     private static final Path DATA_ROOT = Paths.get("data");
     private static final Path USERS_ROOT = DATA_ROOT.resolve("users");
     private static final Path APP_ROOT = DATA_ROOT.resolve("app");
     private static final Path CAREGIVER_FILE = APP_ROOT.resolve("caregiver.txt");
 
+    /**
+     * Initializes storage and ensures required folder structure exists.
+     */
     public Storage() {
         ensureBaseStructure();
     }
 
+    /**
+     * Ensures base directories and files exist.
+     */
     private void ensureBaseStructure() {
         try {
             Files.createDirectories(USERS_ROOT);
@@ -32,6 +42,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Returns a list of all senior user names.
+     *
+     * @return List of user names.
+     */
     public List<String> listSeniorNames() {
         try (Stream<Path> stream = Files.list(USERS_ROOT)) {
             return stream
@@ -44,6 +59,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Checks whether a user exists.
+     *
+     * @param name Name of the user.
+     * @return True if user exists, otherwise false.
+     */
     public boolean userExists(String name) {
         String trimmed = name == null ? "" : name.trim();
         if (trimmed.isEmpty()) {
@@ -54,6 +75,12 @@ public class Storage {
                 .anyMatch(existing -> existing.equalsIgnoreCase(trimmed));
     }
 
+    /**
+     * Adds a new user.
+     *
+     * @param name Name of the user.
+     * @return True if successfully added.
+     */
     public boolean addUser(String name) {
         String trimmed = name == null ? "" : name.trim();
         if (trimmed.isEmpty()) {
@@ -68,6 +95,12 @@ public class Storage {
         return true;
     }
 
+    /**
+     * Validates caregiver password.
+     *
+     * @param password Input password.
+     * @return True if correct.
+     */
     public boolean validateCaregiverPassword(String password) {
         try {
             String stored = Files.readString(CAREGIVER_FILE).trim();
@@ -77,6 +110,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Changes caregiver password.
+     *
+     * @param oldPassword Old password.
+     * @param newPassword New password.
+     * @return True if changed successfully.
+     */
     public boolean changeCaregiverPassword(String oldPassword, String newPassword) {
         if (newPassword == null || newPassword.trim().isEmpty()) {
             return false;
@@ -92,6 +132,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads a user and all associated data.
+     *
+     * @param userName Name of the user.
+     * @return Loaded user object.
+     */
     public User loadUser(String userName) {
         Path userFolder = getUserFolder(userName);
         if (Files.notExists(userFolder)) {
@@ -102,8 +148,10 @@ public class Storage {
 
         User user = new User(userName);
 
-        loadRoutineFile(userFolder.resolve("dailyRoutines.txt"), user.getDailyRoutines(), RoutineType.DAILY);
-        loadRoutineFile(userFolder.resolve("weeklyRoutines.txt"), user.getWeeklyRoutines(), RoutineType.WEEKLY);
+        loadRoutineFile(userFolder.resolve("dailyRoutines.txt"),
+                user.getDailyRoutines(), RoutineType.DAILY);
+        loadRoutineFile(userFolder.resolve("weeklyRoutines.txt"),
+                user.getWeeklyRoutines(), RoutineType.WEEKLY);
 
         Path daysFolder = userFolder.resolve("days");
         if (Files.exists(daysFolder)) {
@@ -125,6 +173,11 @@ public class Storage {
         return user;
     }
 
+    /**
+     * Saves a user and all associated data.
+     *
+     * @param user User to save.
+     */
     public void saveUser(User user) {
         Path userFolder = getUserFolder(user.getName());
         Path daysFolder = userFolder.resolve("days");
@@ -146,6 +199,9 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads routine tasks from a file.
+     */
     private void loadRoutineFile(Path filePath, TaskList taskList, RoutineType type) {
         if (Files.notExists(filePath)) {
             return;
@@ -164,6 +220,9 @@ public class Storage {
         }
     }
 
+    /**
+     * Writes routine tasks to a file.
+     */
     private void writeRoutineFile(Path filePath, TaskList taskList) throws IOException {
         List<String> lines = taskList.getAllTasks().stream()
                 .map(Task::getDescription)
@@ -171,6 +230,9 @@ public class Storage {
         Files.write(filePath, lines);
     }
 
+    /**
+     * Loads a single day file.
+     */
     private Day loadDayFile(Path filePath) {
         try {
             LocalDate date = LocalDate.parse(filePath.getFileName().toString().replace(".txt", ""));
@@ -207,32 +269,46 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves a single day file.
+     */
     private void saveDayFile(Path filePath, Day day) throws IOException {
         List<String> lines = new ArrayList<>();
         lines.add("log=" + day.getLog());
         lines.add("[daily]");
-        day.getDailyStatus().forEach((task, completed) -> lines.add(task + "=" + completed));
+        day.getDailyStatus().forEach((task, completed) ->
+                lines.add(task + "=" + completed));
         lines.add("[weekly]");
-        day.getWeeklyStatus().forEach((task, completed) -> lines.add(task + "=" + completed));
+        day.getWeeklyStatus().forEach((task, completed) ->
+                lines.add(task + "=" + completed));
         Files.write(filePath, lines);
     }
 
+    /**
+     * Returns the folder path for a user.
+     */
     private Path getUserFolder(String userName) {
         return USERS_ROOT.resolve(sanitizeName(userName));
     }
 
+    /**
+     * Reads display name of a user.
+     */
     private String readUserDisplayName(Path userFolder) {
         Path profileFile = userFolder.resolve("profile.txt");
         if (Files.exists(profileFile)) {
             try {
                 return Files.readString(profileFile).trim();
             } catch (IOException ignored) {
-                // Fall back below
+                // fall back
             }
         }
         return userFolder.getFileName().toString().replace("_", " ");
     }
 
+    /**
+     * Sanitizes user name for file system usage.
+     */
     private String sanitizeName(String name) {
         return name.trim().replace(" ", "_");
     }

@@ -7,18 +7,36 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import xmoke.Storage;
 
+/**
+ * Main JavaFX application for the Healthcare Everyday app.
+ */
 public class MainApp extends Application {
     private Stage primaryStage;
     private final Storage storage = new Storage();
 
+    /**
+     * Launches the JavaFX application.
+     *
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Returns the shared storage instance used by the application.
+     *
+     * @return Storage instance.
+     */
     public Storage getStorage() {
         return storage;
     }
 
+    /**
+     * Starts the JavaFX application and shows the login scene.
+     *
+     * @param stage Primary stage of the application.
+     */
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
@@ -29,6 +47,9 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Loads and shows the login scene.
+     */
     public void showLoginScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
@@ -43,6 +64,11 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the senior tasks scene for the specified user.
+     *
+     * @param userName Name of the user.
+     */
     public void showSeniorTasksScene(String userName) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SeniorTasksView.fxml"));
@@ -58,6 +84,11 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the senior log scene for the specified user.
+     *
+     * @param userName Name of the user.
+     */
     public void showSeniorLogScene(String userName) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SeniorLogView.fxml"));
@@ -73,6 +104,9 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the caregiver login scene.
+     */
     public void showCaregiverLoginScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CaregiverLoginView.fxml"));
@@ -87,6 +121,9 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the caregiver menu scene.
+     */
     public void showCaregiverMenuScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CaregiverMenuView.fxml"));
@@ -101,6 +138,11 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the caregiver user selection scene.
+     *
+     * @param mode Mode for the selection scene.
+     */
     public void showCaregiverSelectUserScene(String mode) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CaregiverSelectUserView.fxml"));
@@ -116,6 +158,11 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the edit routine scene for the specified user.
+     *
+     * @param userName Name of the user.
+     */
     public void showEditRoutineScene(String userName) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EditRoutineView.fxml"));
@@ -131,6 +178,9 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the history period selection scene.
+     */
     public void showHistoryPeriodScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HistoryPeriodView.fxml"));
@@ -145,6 +195,11 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the history user selection scene.
+     *
+     * @param period Selected history period.
+     */
     public void showHistorySelectUserScene(String period) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HistorySelectUserView.fxml"));
@@ -160,6 +215,9 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the today's history scene.
+     */
     public void showTodayHistoryScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TodayHistoryView.fxml"));
@@ -174,6 +232,11 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the weekly history scene for the specified user.
+     *
+     * @param userName Name of the user.
+     */
     public void showWeeklyHistoryScene(String userName) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/WeeklyHistoryView.fxml"));
@@ -189,6 +252,9 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads and shows the summary generation user selection scene.
+     */
     public void showGenerateSummarySelectUserScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GenerateSummarySelectUserView.fxml"));
@@ -203,6 +269,12 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Shows an error alert with the given title and message.
+     *
+     * @param title Title of the alert.
+     * @param message Message to display.
+     */
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle(title);

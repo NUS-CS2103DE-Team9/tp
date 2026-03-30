@@ -1,10 +1,13 @@
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-import java.util.List;
-
+/**
+ * Controller for the caregiver user selection view.
+ */
 public class CaregiverSelectUserController {
     @FXML
     private Label titleLabel;
@@ -15,10 +18,20 @@ public class CaregiverSelectUserController {
     private MainApp mainApp;
     private String mode;
 
+    /**
+     * Sets the main application reference for scene switching and storage access.
+     *
+     * @param mainApp Main application instance.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
+    /**
+     * Sets the mode of the controller and updates the UI accordingly.
+     *
+     * @param mode Mode of operation (e.g. "edit").
+     */
     public void setMode(String mode) {
         this.mode = mode;
         if ("edit".equals(mode)) {
@@ -29,6 +42,9 @@ public class CaregiverSelectUserController {
         loadUsers();
     }
 
+    /**
+     * Loads the list of users and displays them as buttons.
+     */
     private void loadUsers() {
         userContainer.getChildren().clear();
         List<String> users = mainApp.getStorage().listSeniorNames();
@@ -45,6 +61,9 @@ public class CaregiverSelectUserController {
         }
     }
 
+    /**
+     * Returns the user to the caregiver menu scene.
+     */
     @FXML
     private void handleBack() {
         mainApp.showCaregiverMenuScene();
