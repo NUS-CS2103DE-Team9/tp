@@ -4,167 +4,236 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-
-/**
- * Handles loading tasks from disk and saving tasks to disk in a simple text-based format.
- */
+import java.util.stream.Stream;
 
 public class Storage {
     private static final Path DATA_ROOT = Paths.get("data");
-    private static final String LEGACY_USER_FOLDER = "Obi-Wan_Kenobi";
-    private static final String[] CHEER_QUOTES = {
-        "Do. Or do not. There is no try.",
-        "Patience you must have my young Padawan.",
-        "Train yourself to let go of everything you fear to lose.",
-        "Always pass on what you have learned.",
-        "Feel the force!",
-        "A Jedi uses the Force for knowledge and defense, never for attack.",
-        "Difficult to see. Always in motion is the future.",
-        "Fear is the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering.",
-        "Your path you must decide."
-    };
+    private static final Path USERS_ROOT = DATA_ROOT.resolve("users");
+    private static final Path APP_ROOT = DATA_ROOT.resolve("app");
+    private static final Path CAREGIVER_FILE = APP_ROOT.resolve("caregiver.txt");
 
-    private final Path dataFolderPath;
-    private final Path dataFilePath;
-    private final Path cheerFilePath;
-
-    /** Uses default shared data folder (legacy). */
     public Storage() {
-        this.dataFolderPath = DATA_ROOT;
-        this.dataFilePath = DATA_ROOT.resolve("XMOKE.txt");
-        this.cheerFilePath = DATA_ROOT.resolve("cheer.txt");
-        ensureDataFileExists();
+        ensureBaseStructure();
     }
 
-    /**
-     * Uses a user-specific folder under data/ so each user has separate task data.
-     *
-     * @param userDisplayName Display name (e.g. "Obi-Wan Kenobi"); spaces become underscores in path.
-     */
-    public Storage(String userDisplayName) {
-        String folder = userDisplayName.trim().replace(" ", "_");
-        this.dataFolderPath = DATA_ROOT.resolve(folder);
-        this.dataFilePath = dataFolderPath.resolve("XMOKE.txt");
-        this.cheerFilePath = dataFolderPath.resolve("cheer.txt");
-        ensureDataFileExists();
-        migrateLegacyDataIfNeeded(folder);
-    }
-
-    /**
-     * Ensures the data folder and data file exist. Creates them if missing.
-     *
-     * @throws IOException If folder/file creation fails.
-     */
-
-    private void ensureDataFileExists() {
+    private void ensureBaseStructure() {
         try {
-            Files.createDirectories(dataFolderPath);
-            if (Files.notExists(dataFilePath)) {
-                Files.createFile(dataFilePath);
-            }
-            if (Files.notExists(cheerFilePath)) {
-                Files.createFile(cheerFilePath);
+            Files.createDirectories(USERS_ROOT);
+            Files.createDirectories(APP_ROOT);
+            if (Files.notExists(CAREGIVER_FILE)) {
+                Files.writeString(CAREGIVER_FILE, "caregiver");
             }
         } catch (IOException e) {
-            System.out.println("OOPS!!! I couldn't set up the data file: " + e.getMessage());
+            throw new RuntimeException("Failed to initialize storage: " + e.getMessage(), e);
         }
     }
 
-    /** One-time migration: if this user is Obi-Wan and legacy data exists, copy it into user folder. */
-    private void migrateLegacyDataIfNeeded(String userFolder) {
-        if (!LEGACY_USER_FOLDER.equals(userFolder)) {
+    public List<String> listSeniorNames() {
+        try (Stream<Path> stream = Files.list(USERS_ROOT)) {
+            return stream
+                    .filter(Files::isDirectory)
+                    .map(this::readUserDisplayName)
+                    .sorted(String.CASE_INSENSITIVE_ORDER)
+                    .toList();
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean userExists(String name) {
+        String trimmed = name == null ? "" : name.trim();
+        if (trimmed.isEmpty()) {
+            return false;
+        }
+
+        return listSeniorNames().stream()
+                .anyMatch(existing -> existing.equalsIgnoreCase(trimmed));
+    }
+
+    public boolean addUser(String name) {
+        String trimmed = name == null ? "" : name.trim();
+        if (trimmed.isEmpty()) {
+            return false;
+        }
+        if (userExists(trimmed)) {
+            return false;
+        }
+
+        User user = new User(trimmed);
+        saveUser(user);
+        return true;
+    }
+
+    public boolean validateCaregiverPassword(String password) {
+        try {
+            String stored = Files.readString(CAREGIVER_FILE).trim();
+            return stored.equals(password);
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public boolean changeCaregiverPassword(String oldPassword, String newPassword) {
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            return false;
+        }
+        if (!validateCaregiverPassword(oldPassword)) {
+            return false;
+        }
+        try {
+            Files.writeString(CAREGIVER_FILE, newPassword.trim());
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public User loadUser(String userName) {
+        Path userFolder = getUserFolder(userName);
+        if (Files.notExists(userFolder)) {
+            User user = new User(userName);
+            saveUser(user);
+            return user;
+        }
+
+        User user = new User(userName);
+
+        loadRoutineFile(userFolder.resolve("dailyRoutines.txt"), user.getDailyRoutines(), RoutineType.DAILY);
+        loadRoutineFile(userFolder.resolve("weeklyRoutines.txt"), user.getWeeklyRoutines(), RoutineType.WEEKLY);
+
+        Path daysFolder = userFolder.resolve("days");
+        if (Files.exists(daysFolder)) {
+            try (Stream<Path> stream = Files.list(daysFolder)) {
+                stream.filter(Files::isRegularFile)
+                        .sorted(Comparator.comparing(Path::getFileName))
+                        .forEach(path -> {
+                            Day day = loadDayFile(path);
+                            if (day != null) {
+                                user.addDay(day);
+                            }
+                        });
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to load day files for " + userName, e);
+            }
+        }
+
+        user.getOrCreateDay(LocalDate.now());
+        return user;
+    }
+
+    public void saveUser(User user) {
+        Path userFolder = getUserFolder(user.getName());
+        Path daysFolder = userFolder.resolve("days");
+
+        try {
+            Files.createDirectories(userFolder);
+            Files.createDirectories(daysFolder);
+
+            Files.writeString(userFolder.resolve("profile.txt"), user.getName());
+
+            writeRoutineFile(userFolder.resolve("dailyRoutines.txt"), user.getDailyRoutines());
+            writeRoutineFile(userFolder.resolve("weeklyRoutines.txt"), user.getWeeklyRoutines());
+
+            for (Day day : user.getDays()) {
+                saveDayFile(daysFolder.resolve(day.getDate() + ".txt"), day);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save user " + user.getName(), e);
+        }
+    }
+
+    private void loadRoutineFile(Path filePath, TaskList taskList, RoutineType type) {
+        if (Files.notExists(filePath)) {
             return;
         }
-        Path legacyData = DATA_ROOT.resolve("XMOKE.txt");
+
         try {
-            if (Files.exists(legacyData) && (!Files.exists(dataFilePath) || Files.size(dataFilePath) == 0)) {
-                Files.copy(legacyData, dataFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            List<String> lines = Files.readAllLines(filePath);
+            for (String line : lines) {
+                String trimmed = line.trim();
+                if (!trimmed.isEmpty()) {
+                    taskList.addTask(new Task(trimmed, type));
+                }
             }
         } catch (IOException e) {
-            System.out.println("OOPS!!! Could not migrate legacy data: " + e.getMessage());
+            throw new RuntimeException("Failed to load routine file: " + filePath, e);
         }
     }
 
-    /**
-     * Loads tasks from the data file.
-     *
-     * @return A list of tasks loaded from disk.
-     * @throws IOException If reading the file fails.
-     */
+    private void writeRoutineFile(Path filePath, TaskList taskList) throws IOException {
+        List<String> lines = taskList.getAllTasks().stream()
+                .map(Task::getDescription)
+                .toList();
+        Files.write(filePath, lines);
+    }
 
-    public TaskList loadTasks() {
-        TaskList taskList = new TaskList();
-
+    private Day loadDayFile(Path filePath) {
         try {
-            List<String> lines = Files.readAllLines(dataFilePath);
+            LocalDate date = LocalDate.parse(filePath.getFileName().toString().replace(".txt", ""));
+            Day day = new Day(date);
+
+            List<String> lines = Files.readAllLines(filePath);
+            String section = "";
+
             for (String line : lines) {
-                if (line.trim().isEmpty()) {
-                    continue;
-                }
+                if (line.startsWith("log=")) {
+                    day.setLog(line.substring(4));
+                } else if (line.equals("[daily]")) {
+                    section = "daily";
+                } else if (line.equals("[weekly]")) {
+                    section = "weekly";
+                } else if (!line.isBlank()) {
+                    String[] parts = line.split("=", 2);
+                    if (parts.length == 2) {
+                        String taskName = parts[0].trim();
+                        boolean completed = Boolean.parseBoolean(parts[1].trim());
 
-                String[] parts = line.split("\\|");
-                if (parts.length < 3) {
-                    continue;
-                }
-
-                Task.TaskType type;
-                try {
-                    type = Task.TaskType.valueOf(parts[0].trim());
-                } catch (IllegalArgumentException e) {
-                    continue;
-                }
-
-                boolean done = parts[1].trim().equals("1");
-                String description = parts[2].trim();
-
-                LocalDateTime dateTime = null;
-                if (parts.length >= 4 && !parts[3].trim().isEmpty()) {
-                    try {
-                        dateTime = LocalDateTime.parse(parts[3].trim());
-                    } catch (DateTimeParseException e) {
-                        // If parsing fails, dateTime remains null
+                        if (section.equals("daily")) {
+                            day.setDailyCompleted(taskName, completed);
+                        } else if (section.equals("weekly")) {
+                            day.setWeeklyCompleted(taskName, completed);
+                        }
                     }
                 }
-
-                Task task = new Task(description, type, done, dateTime);
-                try {
-                    taskList.addTask(task);
-                } catch (IllegalStateException e) {
-                    // List is full (e.g. file has more than MAX_TASKS); stop adding, keep already-loaded tasks
-                    break;
-                }
             }
-        } catch (IOException e) {
-            System.out.println("OOPS!!! I couldn't load saved data: " + e.getMessage());
-        }
 
-        return taskList;
-    }
-
-    /**
-     * Saves the given tasks to disk.
-     *
-     * @param taskList Task list to save.
-     */
-
-    public void saveTasks(TaskList taskList) {
-        try {
-            StringBuilder content = new StringBuilder();
-            for (Task task : taskList.getAllTasks()) {
-                content.append(task.toFileFormat()).append("\n");
-            }
-            Files.writeString(dataFilePath, content.toString());
-        } catch (IOException e) {
-            System.out.println("OOPS!!! I couldn't save data: " + e.getMessage());
+            return day;
+        } catch (Exception e) {
+            return null;
         }
     }
 
-    /** Returns a random cheer quote from the fixed list of nine messages. */
-    public String getRandomCheerQuote() {
-        int index = (int) (Math.random() * CHEER_QUOTES.length);
-        return CHEER_QUOTES[index];
+    private void saveDayFile(Path filePath, Day day) throws IOException {
+        List<String> lines = new ArrayList<>();
+        lines.add("log=" + day.getLog());
+        lines.add("[daily]");
+        day.getDailyStatus().forEach((task, completed) -> lines.add(task + "=" + completed));
+        lines.add("[weekly]");
+        day.getWeeklyStatus().forEach((task, completed) -> lines.add(task + "=" + completed));
+        Files.write(filePath, lines);
+    }
+
+    private Path getUserFolder(String userName) {
+        return USERS_ROOT.resolve(sanitizeName(userName));
+    }
+
+    private String readUserDisplayName(Path userFolder) {
+        Path profileFile = userFolder.resolve("profile.txt");
+        if (Files.exists(profileFile)) {
+            try {
+                return Files.readString(profileFile).trim();
+            } catch (IOException ignored) {
+                // Fall back below
+            }
+        }
+        return userFolder.getFileName().toString().replace("_", " ");
+    }
+
+    private String sanitizeName(String name) {
+        return name.trim().replace(" ", "_");
     }
 }

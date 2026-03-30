@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="CaregiverSelectUserController">
+    <children>
+        <VBox alignment="CENTER" spacing="20.0" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="40.0">
+            <children>
+                <Label fx:id="titleLabel" style="-fx-font-size: 24;" />
+                <VBox fx:id="userContainer" alignment="CENTER" spacing="10.0" />
+                <Button text="Back" onAction="#handleBack" prefWidth="220.0" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

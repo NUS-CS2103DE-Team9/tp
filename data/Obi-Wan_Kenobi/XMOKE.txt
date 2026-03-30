@@ -1,9 +1,0 @@
-D|0|assignment|2019-10-15T23:59
-D|0|project|2026-02-04T23:59
-T|1|battle
-T|0|meditation
-D|0|save the princess|2026-05-10T23:59
-T|0|SYMPTOM|6|headache after lunch|2026-03-23T16:49:49.262935900
-D|0|DEADLINE|exercise|2026-03-17T19:00
-D|0|DEADLINE|take meds|2026-03-23T19:00
-T|0|ROUTINE|breakfast|SKIPPED|slept late|2026-03-23T16:51:32.296423

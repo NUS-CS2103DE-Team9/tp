@@ -1,3 +1,0 @@
-Keep going – even the best programmers started with Hello World.
-Make it work, then make it clean.
-Small steps every day beat big bursts once a month.

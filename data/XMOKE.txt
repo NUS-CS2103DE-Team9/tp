@@ -1,6 +1,0 @@
-D|0|assignment|2019-10-15T23:59
-D|0|return book|2019-12-02T18:00
-D|0|project|2026-02-04T23:59
-T|0|reading
-D|1|laundry (by: Sunday)
-T|0|eat
