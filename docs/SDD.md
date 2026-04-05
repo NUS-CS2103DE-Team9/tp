@@ -16,23 +16,22 @@ The system is intended for routine tracking and record-keeping purposes only. It
 
 ## Architecture Design
 
-The system follows a modular layered architecture consisting of four main components:
+The system follows a modular layered architecture consisting of three main components:
 
 - **UI**
-- **Logic**
 - **Model**
 - **Storage**
 
-This separation ensures that different parts of the system can be developed and maintained independently.
+The responsibilities of the logic layer are distributed across controllers and model classes.
 
 ### Component Interaction
 
 1. The **UI** handles user interaction through a graphical interface.
-2. The **Logic** processes user actions and coordinates system behavior.
+2. Controllers process user actions and coordinate system behavior.
 3. The **Model** stores and manages application data.
 4. The **Storage** handles reading and writing data to local files.
 
-This layered approach prevents direct coupling between UI and storage, improving maintainability.
+This structure ensures separation of concerns while keeping the implementation simple.
 
 ---
 
@@ -44,40 +43,18 @@ The UI component is responsible for:
 - displaying the graphical interface using JavaFX
 - allowing users to interact with routines and daily logs
 - presenting summaries and historical data
-- forwarding user actions to the Logic component
+- forwarding user actions to controllers
 - displaying feedback such as success messages or errors
 
-Typical UI views may include:
-- dashboard view (overview of routines and recent logs)
-- routine checklist view
+Key UI views include:
+- login view (user selection)
+- senior task checklist view
 - daily log input view
+- caregiver menu view
 - history view
-- summary/export view
+- summary generation view
 
 The UI is designed to be simple, readable, and suitable for senior users.
-
----
-
-### Logic Component
-
-The Logic component acts as the central controller of the system.
-
-It is responsible for:
-- receiving user actions from the UI
-- validating input data
-- executing operations such as:
-    - adding or modifying routines
-    - recording daily logs
-    - retrieving historical records
-    - generating summaries
-- updating the Model component
-- requesting the Storage component to persist data
-
-Possible logic classes include:
-- `RoutineManager`
-- `LogManager`
-- `ProfileManager`
-- `SummaryGenerator`
 
 ---
 
@@ -87,27 +64,38 @@ The Model component represents the core data structures of the system.
 
 It is responsible for:
 - storing routines and their properties
-- storing daily wellbeing logs as free-text entries
+- storing daily wellbeing logs
 - maintaining user profile data
 - organizing historical records
 
-Key model classes may include:
+Key model classes include:
 
-- `UserProfile`
-    - represents a single user (senior or caregiver)
-    - stores associated routines and logs
+#### User
+- represents a single user
+- stores daily and weekly routines
+- stores a list of day records
+- provides methods to retrieve or create day data
 
-- `Routine`
-    - represents a recurring task
-    - includes properties such as name, description, and frequency
+#### Task
+- represents a recurring routine
+- contains description and routine type
 
-- `DailyLog`
-    - represents a single day’s wellbeing record
-    - contains:
-        - date
-        - content (free-text entry)
+#### TaskList
+- manages a collection of tasks
+- supports addition, removal, and lookup
 
-The model is independent of UI and storage implementation.
+#### Day
+- represents a single day’s record
+- contains:
+  - date
+  - log (free-text)
+  - daily task completion status
+  - weekly task completion status
+- handles synchronization with routines
+
+#### Enums
+- Role (SENIOR, CAREGIVER)
+- RoutineType (DAILY, WEEKLY)
 
 ---
 
@@ -118,24 +106,44 @@ The Storage component handles persistent data storage using local files.
 It is responsible for:
 - saving user profiles, routines, and logs
 - loading data when the application starts
-- organizing data into profile-specific folders
-- supporting data export operations
+- organizing data into user-specific folders
+- handling caregiver authentication
 
-A simplified storage structure may look like:
+The storage structure is:
 
-    data/
-        profileA/ 
-            routines.txt
-            dailylogs.txt
-        profileB/
-            routines.txt 
-            dailylogs.txt
+- data/ 
+  - app/ 
+    - caregiver.txt 
+  - users/
+    - senior1/ 
+      - profile.txt 
+      - dailyRoutines.txt 
+      - weeklyRoutines.txt 
+      - days/ 
+        - YYYY-MM-DD.txt
+    - senior2/
+    - ...
 
-Key classes include:
-- `StorageManager`
-    - central interface for saving and loading data
-- `ExportService`
-    - handles exporting summary data (e.g. CSV or text format)
+
+Each day file stores:
+- log text
+- daily task completion
+- weekly task completion
+
+---
+
+### Summary Component
+
+The system includes a summary generation component.
+
+#### SummaryGenerator
+- generates monthly summary reports in CSV format
+- computes:
+  - completion rates
+  - task statistics
+  - daily logs
+  - detailed history
+- uses a rolling 30-day period 
 
 ---
 
@@ -144,13 +152,10 @@ Key classes include:
 A typical system interaction follows this sequence:
 
 1. The user performs an action in the GUI.
-2. The UI sends the action and input data to the Logic component.
-3. The Logic component validates the input.
-4. The Logic component updates the Model.
-5. The Logic component calls the Storage component to save changes.
-6. The UI updates to reflect the new state.
-
-This ensures a clear separation of responsibilities across components.
+2. The controller processes the action.
+3. The Model is updated.
+4. The Storage component saves the updated data.
+5. The UI refreshes to reflect the new state.
 
 ---
 
@@ -170,16 +175,14 @@ This ensures a clear separation of responsibilities across components.
 
 ### Sequence Diagrams
 
-**Scenario**: Senior marking a routine from the checklist as 'completed'
-1. Senior clicks a routine item as completed 
-2. MainWindow receives the action 
-3. MainWindow calls RoutineManager.markRoutine(routineId, "COMPLETED")
-4. RoutineManager finds the target routine from the current profile 
-5. RoutineManager tells Routine to mark itself completed 
-6. RoutineManager tells StorageManager to save the updated profile 
-7. StorageManager writes the data 
-8. control returns to UI 
-9. MainWindow refreshes checklist display
+**Scenario**: Senior marking a routine as completed
+
+1. Senior selects a task checkbox
+2. Controller receives the action
+3. Controller updates the corresponding Day object
+4. Controller calls Storage.saveUser()
+5. Storage writes updated data to file
+6. UI updates display
 
 ![Sequence Diagram](images/Sequence Diagram.png)
 
@@ -189,80 +192,58 @@ This ensures a clear separation of responsibilities across components.
 
 ### 1. Desktop GUI-based design
 
-The system is implemented as a desktop GUI application to improve accessibility for seniors. A graphical interface is easier to understand and interact with compared to command-line interfaces.
+The system is implemented as a desktop GUI application to improve accessibility for seniors.
 
-This improves usability but increases implementation complexity.
-
----
-
-### 2. Layered modular architecture
-
-The system adopts a layered architecture (UI, Logic, Model, Storage) to separate concerns.
-
-This design:
-- reduces coupling between components
-- improves code maintainability
-- allows easier debugging and testing
+A graphical interface is easier to understand and interact with compared to command-line interfaces.
 
 ---
 
-### 3. Local persistent storage
+### 2. Simplified layered architecture
 
-The system uses local file-based storage instead of a remote database.
+The system uses UI, Model, and Storage components.
+
+Controllers handle interaction logic directly instead of introducing a separate logic layer.
+
+This reduces complexity while maintaining separation of concerns.
+
+---
+
+### 3. File-based storage
+
+The system uses local file storage instead of a database.
 
 Advantages:
 - supports offline usage
-- simplifies system setup
-- avoids dependency on internet connectivity
-
-Trade-off:
-- no remote synchronization between devices
+- requires no setup
+- easy to inspect and debug
 
 ---
 
-### 4. Free-text daily logging
+### 4. Day-based data organization
 
-Daily wellbeing logs are implemented as free-text entries instead of structured symptom inputs.
-
-This allows seniors to:
-- record their condition naturally
-- avoid complex input formats
-
-This design prioritizes usability and simplicity over structured data analysis.
-
----
-
-### 5. Profile-based data organization
-
-The system supports multiple local user profiles.
-
-Each profile has its own set of:
-- routines
-- daily logs
-- stored data files
+Each day is stored as a separate record.
 
 This allows:
-- separation between different users (e.g., multiple seniors)
-- caregiver access to multiple profiles
+- tracking historical data
+- generating summaries
+- preventing data overwrite
 
 ---
 
-### 6. Limited historical data focus
+### 5. Immediate persistence
 
-The system is designed to focus on recent records (e.g., around one month).
+All updates are saved immediately after user actions.
 
-This:
-- keeps data manageable
-- improves performance
-- aligns with short-term health monitoring use cases
+This ensures:
+- minimal data loss risk
+- consistent system state
 
 ---
 
-## Future Extensions
+### 6. Free-text logging
 
-Possible future improvements include:
-- reminder notifications for routines
-- graphical trend visualization
-- cloud backup and synchronization
-- authentication for profile access
-- more advanced summary analysis
+Daily logs are stored as free-text entries.
+
+This allows seniors to:
+- record information naturally
+- avoid complex input structures
