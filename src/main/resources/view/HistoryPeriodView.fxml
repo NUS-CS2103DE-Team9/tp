@@ -7,13 +7,13 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="HistoryPeriodController">
     <children>
-        <VBox alignment="CENTER" spacing="20.0" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="0.0"
+        <VBox alignment="CENTER" spacing="16.0" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="40.0">
             <children>
-                <Label text="What period would you like to check?" style="-fx-font-size: 24;" />
-                <Button text="Today" onAction="#handleToday" prefWidth="220.0" />
-                <Button text="Past week" onAction="#handlePastWeek" prefWidth="220.0" />
-                <Button text="Back" onAction="#handleBack" prefWidth="220.0" />
+                <Label text="What period would you like to check?" styleClass="dialog-title" />
+                <Button text="Today" onAction="#handleToday" prefWidth="260.0" />
+                <Button text="Past week" onAction="#handlePastWeek" prefWidth="260.0" />
+                <Button text="Back" onAction="#handleBack" styleClass="ghost" prefWidth="260.0" />
             </children>
         </VBox>
     </children>

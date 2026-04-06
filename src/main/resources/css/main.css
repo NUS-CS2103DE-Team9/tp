@@ -1,25 +1,32 @@
-.root {
-    -fx-background-image: url("../images/Background_Chat.jpg");
-    -fx-background-size: cover;
-    -fx-background-position: center center;
-    -fx-background-repeat: no-repeat;
+/* Chat window — used together with app.css on the same root */
+
+.chat-bottom-bar {
+    -fx-padding: 8 10 10 10;
+    -fx-spacing: 10;
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1 0 0 0;
 }
 
-.text-field {
-    -fx-background-color: white;
-    -fx-font-size: 14px;
-}
-
-.button {
-    -fx-font-size: 14px;
-}
-
-.scroll-pane,
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
+#dialogContainer {
+    -fx-spacing: 10;
+    -fx-padding: 12 8 16 8;
 }
 
 .chat-dialog {
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 15px;
+    -fx-padding: 10 14;
+    -fx-background-radius: 12;
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.1), 10, 0, 0, 1);
+}
+
+.user-bubble {
+    -fx-background-color: #ccfbf1;
+    -fx-text-fill: #134e4a;
+}
+
+.bot-bubble {
+    -fx-background-color: #ffffff;
 }

@@ -58,8 +58,10 @@ public class EditRoutineController {
         dailyContainer.getChildren().clear();
         for (Task task : user.getDailyRoutines().getAllTasks()) {
             HBox row = new HBox(10);
+            row.getStyleClass().add("edit-row");
             Label label = new Label(task.getDescription());
             Button removeButton = new Button("Remove");
+            removeButton.getStyleClass().addAll("danger", "compact");
             removeButton.setOnAction(e -> {
                 removeRoutine(task.getDescription(), RoutineType.DAILY);
             });
@@ -70,8 +72,10 @@ public class EditRoutineController {
         weeklyContainer.getChildren().clear();
         for (Task task : user.getWeeklyRoutines().getAllTasks()) {
             HBox row = new HBox(10);
+            row.getStyleClass().add("edit-row");
             Label label = new Label(task.getDescription());
             Button removeButton = new Button("Remove");
+            removeButton.getStyleClass().addAll("danger", "compact");
             removeButton.setOnAction(e -> {
                 removeRoutine(task.getDescription(), RoutineType.WEEKLY);
             });

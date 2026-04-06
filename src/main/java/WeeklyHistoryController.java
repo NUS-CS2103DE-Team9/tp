@@ -82,6 +82,7 @@ public class WeeklyHistoryController {
             }
 
             VBox block = new VBox(3);
+            block.getStyleClass().add("weekly-block");
             block.getChildren().add(new Label(task.getDescription() + ": " + completedCount + "/7"));
             block.getChildren().add(
                     new Label("Missed on: " + (missedDays.isEmpty() ? "-" : String.join(", ", missedDays)))
@@ -106,6 +107,7 @@ public class WeeklyHistoryController {
             }
 
             VBox block = new VBox(3);
+            block.getStyleClass().add("weekly-block");
             block.getChildren().add(
                     new Label(task.getDescription() + ": " + (done ? "Done this week" : "Not done this week"))
             );

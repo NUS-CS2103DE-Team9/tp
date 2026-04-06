@@ -6,11 +6,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:controller="MainWindow" prefHeight="600.0" prefWidth="400.0" stylesheets="@/css/main.css" xmlns:fx="http://javafx.com/fxml">
-    <Button onAction="#handleBack" text="Back" AnchorPane.topAnchor="5.0" AnchorPane.leftAnchor="5.0" />
-    <ScrollPane fx:id="scrollPane" fitToWidth="true" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.bottomAnchor="65.0">
-        <VBox fx:id="dialogContainer" prefHeight="-Infinity" />
+<AnchorPane fx:controller="MainWindow" prefHeight="600.0" prefWidth="420.0"
+            stylesheets="@/css/app.css,@/css/main.css" xmlns:fx="http://javafx.com/fxml">
+    <Button onAction="#handleBack" text="Back" styleClass="ghost compact" AnchorPane.topAnchor="12.0" AnchorPane.leftAnchor="16.0" />
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" AnchorPane.topAnchor="52.0" AnchorPane.leftAnchor="12.0"
+                AnchorPane.rightAnchor="12.0" AnchorPane.bottomAnchor="76.0">
+        <VBox fx:id="dialogContainer" prefHeight="-Infinity" spacing="10.0" />
     </ScrollPane>
-    <TextField fx:id="userInput" onAction="#handleUserInput" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="76.0" />
-    <Button fx:id="sendButton" onAction="#handleUserInput" prefWidth="55.0" text="Send" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="1.0" />
+    <TextField fx:id="userInput" onAction="#handleUserInput" promptText="Type a command…"
+               AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="88.0" />
+    <Button fx:id="sendButton" onAction="#handleUserInput" prefWidth="64.0" text="Send" styleClass="compact"
+            AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="16.0" />
 </AnchorPane>

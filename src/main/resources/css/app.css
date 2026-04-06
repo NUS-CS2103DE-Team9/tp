@@ -1,0 +1,231 @@
+/* Healthcare Everyday — global theme (calm, readable) */
+
+.root {
+    -fx-font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+    -fx-font-size: 15px;
+    -fx-background-color: linear-gradient(to bottom, #e0f2f1 0%, #eceff1 45%, #e8eaf0 100%);
+}
+
+.label {
+    -fx-text-fill: #1e293b;
+}
+
+/* Headings */
+.app-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f766e;
+}
+
+.app-subtitle {
+    -fx-font-size: 18px;
+    -fx-text-fill: #475569;
+}
+
+.page-heading {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f766e;
+}
+
+.section-heading {
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #134e4a;
+}
+
+.dialog-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f766e;
+}
+
+.caption {
+    -fx-font-size: 15px;
+    -fx-text-fill: #64748b;
+}
+
+.label.status-success {
+    -fx-text-fill: #047857;
+    -fx-font-size: 14px;
+}
+
+.label.status-error {
+    -fx-text-fill: #be123c;
+    -fx-font-size: 14px;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #0d9488;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 12 22;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(13, 148, 136, 0.28), 8, 0.2, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: #0f766e;
+}
+
+.button:armed {
+    -fx-background-color: #115e59;
+}
+
+.button:focused {
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+}
+
+.button.secondary {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #0f766e;
+    -fx-border-color: #5eead4;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 6, 0, 0, 1);
+}
+
+.button.secondary:hover {
+    -fx-background-color: #f0fdfa;
+}
+
+.button.ghost {
+    -fx-background-color: rgba(255, 255, 255, 0.55);
+    -fx-text-fill: #64748b;
+    -fx-effect: null;
+}
+
+.button.ghost:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-text-fill: #334155;
+}
+
+.button.danger {
+    -fx-background-color: #e11d48;
+    -fx-effect: dropshadow(gaussian, rgba(225, 29, 72, 0.22), 6, 0, 0, 1);
+}
+
+.button.danger:hover {
+    -fx-background-color: #be123c;
+}
+
+.button.compact {
+    -fx-padding: 8 14;
+    -fx-font-size: 14px;
+}
+
+.button.choice {
+    -fx-min-width: 260px;
+    -fx-pref-width: 260px;
+}
+
+/* Form controls */
+.text-field,
+.password-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 8;
+    -fx-padding: 10 12;
+    -fx-font-size: 15px;
+}
+
+.text-field:focused,
+.password-field:focused {
+    -fx-border-color: #2dd4bf;
+    -fx-effect: dropshadow(gaussian, rgba(45, 212, 191, 0.35), 8, 0, 0, 0);
+}
+
+.text-area {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-font-size: 15px;
+}
+
+.text-area:focused {
+    -fx-border-color: #2dd4bf;
+}
+
+.combo-box-base {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #cbd5e1;
+    -fx-background-color: #ffffff;
+}
+
+.combo-box-base:focused {
+    -fx-border-color: #2dd4bf;
+}
+
+/* Checklists */
+.check-box {
+    -fx-font-size: 16px;
+    -fx-text-fill: #1e293b;
+    -fx-wrap-text: true;
+}
+
+.check-box .box {
+    -fx-background-radius: 5;
+    -fx-border-color: #94a3b8;
+    -fx-border-radius: 5;
+    -fx-pref-width: 22px;
+    -fx-pref-height: 22px;
+    -fx-background-color: white;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #0d9488;
+    -fx-border-color: #0f766e;
+}
+
+/* Panels inside scroll areas */
+.panel-inset {
+    -fx-background-color: rgba(255, 255, 255, 0.82);
+    -fx-background-radius: 12;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.08), 14, 0, 0, 2);
+}
+
+.scroll-pane,
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .corner {
+    -fx-background-color: transparent;
+}
+
+/* History / summaries */
+.history-card {
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-spacing: 8;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.07), 10, 0, 0, 2);
+}
+
+.history-user-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f766e;
+}
+
+.weekly-block {
+    -fx-padding: 10 4 12 4;
+    -fx-border-color: transparent transparent transparent transparent;
+}
+
+.edit-row {
+    -fx-alignment: center-left;
+    -fx-padding: 4 0;
+}
+
+.edit-row .label {
+    -fx-font-size: 15px;
+}

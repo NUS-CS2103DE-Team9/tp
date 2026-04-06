@@ -1,10 +1,10 @@
-.root {
-    -fx-background-image: url("../images/Background_Main.jpg");
-    -fx-background-size: cover;
-    -fx-background-position: center center;
-    -fx-background-repeat: no-repeat;
-}
+/* User picker (home) — loads after app.css */
 
-.button {
-    -fx-font-size: 14px;
+.home-panel {
+    -fx-max-width: 360;
+    -fx-padding: 28 32;
+    -fx-background-color: rgba(255, 255, 255, 0.88);
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.12), 18, 0, 0, 3);
+    -fx-spacing: 18;
 }

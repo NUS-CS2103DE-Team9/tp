@@ -7,16 +7,17 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="CaregiverMenuController">
     <children>
-        <VBox alignment="CENTER" spacing="15.0" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="0.0"
-              AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="40.0">
+        <VBox alignment="CENTER" spacing="14.0" AnchorPane.topAnchor="36.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="36.0">
             <children>
-                <Label text="Caregiver Menu" style="-fx-font-size: 28;" />
-                <Button text="Make changes to tasks of senior" onAction="#handleEditRoutine" prefWidth="280.0" />
-                <Button text="View task completion history" onAction="#handleViewHistory" prefWidth="280.0" />
-                <Button text="Generate summary report" onAction="#handleGenerateSummary" prefWidth="280.0" />
-                <Button text="Change password" onAction="#handleChangePassword" prefWidth="280.0" />
-                <Button text="Add new user" onAction="#handleAddUser" prefWidth="280.0" />
-                <Button text="Back" onAction="#handleBack" prefWidth="280.0" />
+                <Label text="Caregiver Menu" styleClass="app-title" />
+                <Label text="Choose an action" styleClass="caption" />
+                <Button text="Make changes to tasks of senior" onAction="#handleEditRoutine" prefWidth="300.0" />
+                <Button text="View task completion history" onAction="#handleViewHistory" prefWidth="300.0" />
+                <Button text="Generate summary report" onAction="#handleGenerateSummary" prefWidth="300.0" />
+                <Button text="Change password" onAction="#handleChangePassword" styleClass="secondary" prefWidth="300.0" />
+                <Button text="Add new user" onAction="#handleAddUser" styleClass="secondary" prefWidth="300.0" />
+                <Button text="Back" onAction="#handleBack" styleClass="ghost" prefWidth="300.0" />
             </children>
         </VBox>
     </children>

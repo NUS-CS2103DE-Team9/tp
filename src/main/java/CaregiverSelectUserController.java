@@ -51,7 +51,8 @@ public class CaregiverSelectUserController {
 
         for (String user : users) {
             Button button = new Button(user);
-            button.setPrefWidth(220);
+            button.setPrefWidth(260);
+            button.getStyleClass().add("choice");
             button.setOnAction(e -> {
                 if ("edit".equals(mode)) {
                     mainApp.showEditRoutineScene(user);

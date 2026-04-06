@@ -5,6 +5,6 @@
 <?import javafx.scene.layout.HBox?>
 
 <HBox fx:root="true" alignment="TOP_RIGHT" xmlns:fx="http://javafx.com/fxml">
-    <Label fx:id="dialog" minHeight="-Infinity" wrapText="true" />
+    <Label fx:id="dialog" minHeight="-Infinity" wrapText="true" styleClass="chat-dialog" />
     <ImageView fx:id="displayPicture" fitHeight="100.0" fitWidth="100.0" />
 </HBox>

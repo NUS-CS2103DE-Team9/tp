@@ -42,7 +42,8 @@ public class HistorySelectUserController {
 
         for (String user : users) {
             Button button = new Button(user);
-            button.setPrefWidth(220);
+            button.setPrefWidth(260);
+            button.getStyleClass().add("choice");
             button.setOnAction(e -> {
                 if ("week".equals(period)) {
                     mainApp.showWeeklyHistoryScene(user);

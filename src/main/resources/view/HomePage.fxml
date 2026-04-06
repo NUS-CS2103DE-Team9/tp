@@ -6,10 +6,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:controller="HomePageController" prefHeight="200.0" prefWidth="320.0" stylesheets="@/css/home.css" xmlns:fx="http://javafx.com/fxml">
-    <VBox alignment="CENTER" spacing="15.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
-        <Label text="Select user" />
-        <ComboBox fx:id="userCombo" prefWidth="200.0" />
-        <Button onAction="#handleEnter" text="Enter" />
+<AnchorPane fx:controller="HomePageController" prefHeight="240.0" prefWidth="400.0"
+            stylesheets="@/css/app.css,@/css/home.css" xmlns:fx="http://javafx.com/fxml">
+    <VBox alignment="CENTER" spacing="16.0" styleClass="home-panel"
+          AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+        <Label text="Select user" styleClass="dialog-title" />
+        <Label text="Choose a senior profile to open the assistant" styleClass="caption" wrapText="true" />
+        <ComboBox fx:id="userCombo" prefWidth="260.0" />
+        <Button onAction="#handleEnter" text="Continue" prefWidth="260.0" />
     </VBox>
 </AnchorPane>

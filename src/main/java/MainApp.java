@@ -11,8 +11,22 @@ import xmoke.Storage;
  * Main JavaFX application for the Healthcare Everyday app.
  */
 public class MainApp extends Application {
+    private static final String APP_STYLESHEET = "/css/app.css";
+
     private Stage primaryStage;
     private final Storage storage = new Storage();
+
+    /**
+     * Attaches the shared application stylesheet to a scene.
+     *
+     * @param scene Scene to style.
+     */
+    private void applyAppStylesheet(Scene scene) {
+        String url = getClass().getResource(APP_STYLESHEET).toExternalForm();
+        if (!scene.getStylesheets().contains(url)) {
+            scene.getStylesheets().add(url);
+        }
+    }
 
     /**
      * Launches the JavaFX application.
@@ -58,7 +72,9 @@ public class MainApp extends Application {
             LoginController controller = loader.getController();
             controller.setMainApp(this);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load login page", e.getMessage());
         }
@@ -78,7 +94,9 @@ public class MainApp extends Application {
             controller.setMainApp(this);
             controller.setUserName(userName);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load senior tasks page", e.getMessage());
         }
@@ -98,7 +116,9 @@ public class MainApp extends Application {
             controller.setMainApp(this);
             controller.setUserName(userName);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load senior log page", e.getMessage());
         }
@@ -115,7 +135,9 @@ public class MainApp extends Application {
             CaregiverLoginController controller = loader.getController();
             controller.setMainApp(this);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load caregiver login page", e.getMessage());
         }
@@ -132,7 +154,9 @@ public class MainApp extends Application {
             CaregiverMenuController controller = loader.getController();
             controller.setMainApp(this);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load caregiver menu", e.getMessage());
         }
@@ -152,7 +176,9 @@ public class MainApp extends Application {
             controller.setMainApp(this);
             controller.setMode(mode);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load user selection page", e.getMessage());
         }
@@ -172,7 +198,9 @@ public class MainApp extends Application {
             controller.setMainApp(this);
             controller.setUserName(userName);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load edit routine page", e.getMessage());
         }
@@ -189,7 +217,9 @@ public class MainApp extends Application {
             HistoryPeriodController controller = loader.getController();
             controller.setMainApp(this);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load history period page", e.getMessage());
         }
@@ -209,7 +239,9 @@ public class MainApp extends Application {
             controller.setMainApp(this);
             controller.setPeriod(period);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load history user selection page", e.getMessage());
         }
@@ -226,7 +258,9 @@ public class MainApp extends Application {
             TodayHistoryController controller = loader.getController();
             controller.setMainApp(this);
 
-            primaryStage.setScene(new Scene(pane, 900, 650));
+            Scene scene = new Scene(pane, 900, 650);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load today's history page", e.getMessage());
         }
@@ -246,7 +280,9 @@ public class MainApp extends Application {
             controller.setMainApp(this);
             controller.setUserName(userName);
 
-            primaryStage.setScene(new Scene(pane, 900, 650));
+            Scene scene = new Scene(pane, 900, 650);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load weekly history page", e.getMessage());
         }
@@ -263,7 +299,9 @@ public class MainApp extends Application {
             GenerateSummarySelectUserController controller = loader.getController();
             controller.setMainApp(this);
 
-            primaryStage.setScene(new Scene(pane, 800, 600));
+            Scene scene = new Scene(pane, 800, 600);
+            applyAppStylesheet(scene);
+            primaryStage.setScene(scene);
         } catch (Exception e) {
             showErrorAlert("Failed to load summary generation page", e.getMessage());
         }

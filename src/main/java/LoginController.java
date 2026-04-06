@@ -32,7 +32,8 @@ public class LoginController {
         List<String> users = mainApp.getStorage().listSeniorNames();
         for (String user : users) {
             Button button = new Button(user);
-            button.setPrefWidth(220);
+            button.setPrefWidth(260);
+            button.getStyleClass().add("choice");
             button.setOnAction(e -> mainApp.showSeniorTasksScene(user));
             userContainer.getChildren().add(button);
         }

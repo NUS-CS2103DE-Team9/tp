@@ -43,17 +43,22 @@ public class TodayHistoryController {
             Day today = user.getDay(LocalDate.now());
 
             VBox userBox = new VBox(8);
+            userBox.getStyleClass().add("history-card");
             Label nameLabel = new Label(userName);
-            nameLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+            nameLabel.getStyleClass().add("history-user-name");
 
             userBox.getChildren().add(nameLabel);
-            userBox.getChildren().add(new Label("Daily"));
+            Label dailyHeading = new Label("Daily");
+            dailyHeading.getStyleClass().add("section-heading");
+            userBox.getChildren().add(dailyHeading);
             for (Task task : user.getDailyRoutines().getAllTasks()) {
                 String mark = today.isDailyCompleted(task.getDescription()) ? "[✓] " : "[ ] ";
                 userBox.getChildren().add(new Label(mark + task.getDescription()));
             }
 
-            userBox.getChildren().add(new Label("Weekly"));
+            Label weeklyHeading = new Label("Weekly");
+            weeklyHeading.getStyleClass().add("section-heading");
+            userBox.getChildren().add(weeklyHeading);
             for (Task task : user.getWeeklyRoutines().getAllTasks()) {
                 String mark = today.isWeeklyCompleted(task.getDescription()) ? "[✓] " : "[ ] ";
                 userBox.getChildren().add(new Label(mark + task.getDescription()));

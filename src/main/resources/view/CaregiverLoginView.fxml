@@ -8,14 +8,15 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="CaregiverLoginController">
     <children>
-        <VBox alignment="CENTER" spacing="20.0" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="0.0"
+        <VBox alignment="CENTER" spacing="18.0" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="40.0">
             <children>
-                <Label text="Caregiver Login" style="-fx-font-size: 26;" />
-                <PasswordField fx:id="passwordField" promptText="Password" maxWidth="220.0" />
-                <Label fx:id="errorLabel" style="-fx-text-fill: red;" />
-                <Button text="Login" onAction="#handleLogin" prefWidth="220.0" />
-                <Button text="Back" onAction="#handleBack" prefWidth="220.0" />
+                <Label text="Caregiver Login" styleClass="page-heading" />
+                <Label text="Enter the shared caregiver password" styleClass="caption" />
+                <PasswordField fx:id="passwordField" promptText="Password" maxWidth="280.0" prefWidth="280.0" />
+                <Label fx:id="errorLabel" styleClass="status-error" />
+                <Button text="Login" onAction="#handleLogin" prefWidth="280.0" />
+                <Button text="Back" onAction="#handleBack" styleClass="ghost" prefWidth="280.0" />
             </children>
         </VBox>
     </children>

@@ -39,7 +39,8 @@ public class GenerateSummarySelectUserController {
 
         for (String userName : users) {
             Button button = new Button(userName);
-            button.setPrefWidth(240);
+            button.setPrefWidth(260);
+            button.getStyleClass().add("choice");
             button.setOnAction(e -> generateSummary(userName));
             userContainer.getChildren().add(button);
         }
