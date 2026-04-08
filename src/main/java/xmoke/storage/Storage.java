@@ -1,4 +1,6 @@
-package xmoke;
+package xmoke.storage;
+
+import xmoke.model.*;
 
 import java.io.IOException;
 import java.nio.file.Files;

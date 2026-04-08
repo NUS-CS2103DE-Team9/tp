@@ -1,30 +1,32 @@
+package xmoke.controller;
+
+import xmoke.MainApp;
+import xmoke.service.AuthService;
+
 import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 /**
- * Controller for choosing which senior's routines to edit (caregiver flow).
+ * Controller for the login view.
  */
-public class CaregiverSelectUserController {
-    @FXML
-    private Label titleLabel;
-
+public class LoginController {
     @FXML
     private VBox userContainer;
 
     private MainApp mainApp;
+    private AuthService authService;
 
     /**
-     * Sets the main application reference and loads users.
+     * Sets the main application reference and loads the users.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-        titleLabel.setText("Whose tasks are we modifying?");
+        this.authService = mainApp.getAuthService();
         loadUsers();
     }
 
@@ -33,22 +35,22 @@ public class CaregiverSelectUserController {
      */
     private void loadUsers() {
         userContainer.getChildren().clear();
-        List<String> users = mainApp.getStorage().listSeniorNames();
 
+        List<String> users = authService.getSeniorNames();
         for (String user : users) {
             Button button = new Button(user);
             button.setPrefWidth(260);
             button.getStyleClass().add("choice");
-            button.setOnAction(e -> mainApp.showEditRoutineScene(user));
+            button.setOnAction(e -> mainApp.showSeniorTasksScene(user));
             userContainer.getChildren().add(button);
         }
     }
 
     /**
-     * Returns the user to the caregiver menu scene.
+     * Opens the caregiver login scene.
      */
     @FXML
-    private void handleBack() {
-        mainApp.showCaregiverMenuScene();
+    private void handleCaregiver() {
+        mainApp.showCaregiverLoginScene();
     }
 }

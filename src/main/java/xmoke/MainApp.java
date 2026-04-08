@@ -1,3 +1,5 @@
+package xmoke;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -5,7 +7,24 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import xmoke.Storage;
+import xmoke.controller.CaregiverLoginController;
+import xmoke.controller.CaregiverMenuController;
+import xmoke.controller.CaregiverSelectUserController;
+import xmoke.controller.EditRoutineController;
+import xmoke.controller.GenerateSummarySelectUserController;
+import xmoke.controller.HistoryPeriodController;
+import xmoke.controller.HistorySelectUserController;
+import xmoke.controller.LoginController;
+import xmoke.controller.SeniorLogController;
+import xmoke.controller.SeniorTasksController;
+import xmoke.controller.TodayHistoryController;
+import xmoke.controller.WeeklyHistoryController;
+import xmoke.service.AuthService;
+import xmoke.service.HistoryService;
+import xmoke.service.LogService;
+import xmoke.service.RoutineService;
+import xmoke.service.SummaryService;
+import xmoke.storage.Storage;
 
 /**
  * Main JavaFX application for the Healthcare Everyday app.
@@ -15,6 +34,13 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private final Storage storage = new Storage();
+    private final AuthService authService = new AuthService(storage);
+    private final RoutineService routineService = new RoutineService(storage);
+    private final LogService logService = new LogService(storage);
+    private final HistoryService historyService = new HistoryService(storage);
+    private final SummaryService summaryService = new SummaryService(storage);
+
+
 
     /**
      * Attaches the shared application stylesheet to a scene.
@@ -38,12 +64,48 @@ public class MainApp extends Application {
     }
 
     /**
-     * Returns the shared storage instance used by the application.
+     * Returns the auth service instance.
      *
-     * @return Storage instance.
+     * @return Auth service.
      */
-    public Storage getStorage() {
-        return storage;
+    public AuthService getAuthService() {
+        return authService;
+    }
+
+    /**
+     * Returns the routine service instance.
+     *
+     * @return Routine service.
+     */
+    public RoutineService getRoutineService() {
+        return routineService;
+    }
+
+    /**
+     * Returns the log service instance.
+     *
+     * @return Log service.
+     */
+    public LogService getLogService() {
+        return logService;
+    }
+
+    /**
+     * Returns the history service instance.
+     *
+     * @return History service.
+     */
+    public HistoryService getHistoryService() {
+        return historyService;
+    }
+
+    /**
+     * Returns the summary service instance.
+     *
+     * @return Summary service.
+     */
+    public SummaryService getSummaryService() {
+        return summaryService;
     }
 
     /**

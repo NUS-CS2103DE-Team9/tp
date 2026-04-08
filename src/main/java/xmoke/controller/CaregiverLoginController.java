@@ -1,3 +1,7 @@
+package xmoke.controller;
+
+import xmoke.MainApp;
+import xmoke.service.AuthService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -13,14 +17,16 @@ public class CaregiverLoginController {
     private Label errorLabel;
 
     private MainApp mainApp;
+    private AuthService authService;
 
     /**
-     * Sets the main application reference for scene switching and storage access.
+     * Sets the main application reference for scene switching and service access.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+        this.authService = mainApp.getAuthService();
     }
 
     /**
@@ -28,7 +34,7 @@ public class CaregiverLoginController {
      */
     @FXML
     private void handleLogin() {
-        boolean valid = mainApp.getStorage().validateCaregiverPassword(passwordField.getText());
+        boolean valid = authService.validateCaregiverPassword(passwordField.getText());
         if (valid) {
             errorLabel.setText("");
             mainApp.showCaregiverMenuScene();

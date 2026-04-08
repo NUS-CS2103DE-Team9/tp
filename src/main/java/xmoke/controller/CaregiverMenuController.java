@@ -1,3 +1,8 @@
+package xmoke.controller;
+
+import xmoke.MainApp;
+import xmoke.service.AuthService;
+
 import java.util.Optional;
 
 import javafx.fxml.FXML;
@@ -9,14 +14,16 @@ import javafx.scene.control.TextInputDialog;
  */
 public class CaregiverMenuController {
     private MainApp mainApp;
+    private AuthService authService;
 
     /**
-     * Sets the main application reference for scene switching and storage access.
+     * Sets the main application reference for scene switching and service access.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+        this.authService = mainApp.getAuthService();
     }
 
     /**
@@ -64,7 +71,7 @@ public class CaregiverMenuController {
             return;
         }
 
-        boolean added = mainApp.getStorage().addUser(name);
+        boolean added = authService.addUser(name);
         if (added) {
             showInfo("Success", "User \"" + name + "\" has been added.");
         } else {
@@ -98,7 +105,7 @@ public class CaregiverMenuController {
         String oldPassword = oldResult.get();
         String newPassword = newResult.get();
 
-        boolean changed = mainApp.getStorage().changeCaregiverPassword(oldPassword, newPassword);
+        boolean changed = authService.changeCaregiverPassword(oldPassword, newPassword);
         if (changed) {
             showInfo("Success", "Password updated successfully.");
         } else {

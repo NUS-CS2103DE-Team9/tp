@@ -1,4 +1,4 @@
-package xmoke;
+package xmoke.model;
 
 /**
  * Represents a routine task with a description and routine type.

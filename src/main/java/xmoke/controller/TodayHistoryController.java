@@ -1,14 +1,14 @@
-import java.time.LocalDate;
+package xmoke.controller;
+
+import xmoke.MainApp;
+import xmoke.service.HistoryService;
+
 import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import xmoke.Day;
-import xmoke.Storage;
-import xmoke.Task;
-import xmoke.User;
 
 /**
  * Controller for the today's history view.
@@ -18,16 +18,16 @@ public class TodayHistoryController {
     private VBox usersContainer;
 
     private MainApp mainApp;
-    private Storage storage;
+    private HistoryService historyService;
 
     /**
-     * Sets the main application reference and storage reference.
+     * Sets the main application reference and service reference.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-        this.storage = mainApp.getStorage();
+        this.historyService = mainApp.getHistoryService();
         loadTodayHistory();
     }
 
@@ -36,32 +36,32 @@ public class TodayHistoryController {
      */
     private void loadTodayHistory() {
         usersContainer.getChildren().clear();
-        List<String> users = storage.listSeniorNames();
+        List<HistoryService.TodayUserHistory> users = historyService.getTodayHistoryForAllUsers();
 
-        for (String userName : users) {
-            User user = storage.loadUser(userName);
-            Day today = user.getDay(LocalDate.now());
-
+        for (HistoryService.TodayUserHistory userHistory : users) {
             VBox userBox = new VBox(8);
             userBox.getStyleClass().add("history-card");
-            Label nameLabel = new Label(userName);
-            nameLabel.getStyleClass().add("history-user-name");
 
+            Label nameLabel = new Label(userHistory.getUserName());
+            nameLabel.getStyleClass().add("history-user-name");
             userBox.getChildren().add(nameLabel);
+
             Label dailyHeading = new Label("Daily");
             dailyHeading.getStyleClass().add("section-heading");
             userBox.getChildren().add(dailyHeading);
-            for (Task task : user.getDailyRoutines().getAllTasks()) {
-                String mark = today.isDailyCompleted(task.getDescription()) ? "[✓] " : "[ ] ";
-                userBox.getChildren().add(new Label(mark + task.getDescription()));
+
+            for (HistoryService.TaskStatus taskStatus : userHistory.getDailyTasks()) {
+                String mark = taskStatus.isCompleted() ? "[✓] " : "[ ] ";
+                userBox.getChildren().add(new Label(mark + taskStatus.getTaskName()));
             }
 
             Label weeklyHeading = new Label("Weekly");
             weeklyHeading.getStyleClass().add("section-heading");
             userBox.getChildren().add(weeklyHeading);
-            for (Task task : user.getWeeklyRoutines().getAllTasks()) {
-                String mark = today.isWeeklyCompleted(task.getDescription()) ? "[✓] " : "[ ] ";
-                userBox.getChildren().add(new Label(mark + task.getDescription()));
+
+            for (HistoryService.TaskStatus taskStatus : userHistory.getWeeklyTasks()) {
+                String mark = taskStatus.isCompleted() ? "[✓] " : "[ ] ";
+                userBox.getChildren().add(new Label(mark + taskStatus.getTaskName()));
             }
 
             HBox row = new HBox(40);

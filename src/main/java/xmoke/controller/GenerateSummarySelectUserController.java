@@ -1,3 +1,9 @@
+package xmoke.controller;
+
+import xmoke.MainApp;
+import xmoke.service.AuthService;
+import xmoke.service.SummaryService;
+
 import java.nio.file.Path;
 import java.util.List;
 
@@ -5,9 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import xmoke.Storage;
-import xmoke.SummaryGenerator;
-import xmoke.User;
 
 /**
  * Controller for the summary generation user selection view.
@@ -17,16 +20,18 @@ public class GenerateSummarySelectUserController {
     private VBox userContainer;
 
     private MainApp mainApp;
-    private Storage storage;
+    private AuthService authService;
+    private SummaryService summaryService;
 
     /**
-     * Sets the main application reference and storage reference.
+     * Sets the main application reference and service references.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-        this.storage = mainApp.getStorage();
+        this.authService = mainApp.getAuthService();
+        this.summaryService = mainApp.getSummaryService();
         loadUsers();
     }
 
@@ -35,7 +40,7 @@ public class GenerateSummarySelectUserController {
      */
     private void loadUsers() {
         userContainer.getChildren().clear();
-        List<String> users = storage.listSeniorNames();
+        List<String> users = authService.getSeniorNames();
 
         for (String userName : users) {
             Button button = new Button(userName);
@@ -53,9 +58,7 @@ public class GenerateSummarySelectUserController {
      */
     private void generateSummary(String userName) {
         try {
-            User user = storage.loadUser(userName);
-            SummaryGenerator generator = new SummaryGenerator();
-            Path reportPath = generator.generateMonthlySummary(user);
+            Path reportPath = summaryService.generateMonthlySummary(userName);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Report Generated");
@@ -63,7 +66,7 @@ public class GenerateSummarySelectUserController {
             alert.setContentText("Report has been generated for:\n"
                     + userName
                     + "\n\nPlease check:\n"
-                    + reportPath.toString());
+                    + reportPath);
             alert.showAndWait();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
