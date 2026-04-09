@@ -1,5 +1,6 @@
-package xmoke;
+package xmoke.model;
 
+import xmoke.MainApp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -1,0 +1,5 @@
+log=aa
+[daily]
+T1=true
+[weekly]
+W1=true

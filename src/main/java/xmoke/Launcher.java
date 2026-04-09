@@ -1,3 +1,5 @@
+package xmoke;
+
 /**
  * Plain launcher for the application; JAR manifest Main-Class should point here.
  */

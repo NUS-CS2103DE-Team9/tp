@@ -1,4 +1,8 @@
-package xmoke;
+package xmoke.service;
+
+import xmoke.model.Day;
+import xmoke.model.Task;
+import xmoke.model.User;
 
 import java.io.IOException;
 import java.nio.file.Files;

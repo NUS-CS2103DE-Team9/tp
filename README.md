@@ -82,7 +82,7 @@ See also the [User Guide](docs/README.md) for more details.
    - Select the project directory, then click **OK**.
    - Accept the defaults if prompted.
 3. Configure the project to use **JDK 21**: [Set up JDK in IntelliJ](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk). Set **Project language level** to **SDK default**.
-4. To run the app: run **MainApp** (in `src/main/java/MainApp.java`) — e.g. right-click `MainApp.java` and choose **Run 'MainApp.main()'**, or run the Gradle task **run** (e.g. `.\gradlew run`). A window titled **XMOKE** will open; choose your Jedi, click **Enter**, then chat with Master Yoda in the text box and press Enter or click **Send**.
+4. To run the app: run **xmoke.MainApp** (in `src/main/java/xmoke.MainApp.java`) — e.g. right-click `xmoke.MainApp.java` and choose **Run 'xmoke.MainApp.main()'**, or run the Gradle task **run** (e.g. `.\gradlew run`). A window titled **XMOKE** will open; choose your Jedi, click **Enter**, then chat with Master Yoda in the text box and press Enter or click **Send**.
 
 > [!NOTE]
 > Keep the `src/main/java` folder as the root for Java source files so that tools like Gradle can find them.
@@ -135,4 +135,4 @@ gradlew.bat test
 
 ## Tech
 
-- Java 21, JavaFX 21 (GUI), Gradle. Main entry point: **MainApp**; GUI and FXML under `src/main/resources/view/`.
+- Java 21, JavaFX 21 (GUI), Gradle. Main entry point: **xmoke.MainApp**; GUI and FXML under `src/main/resources/view/`.

@@ -1,3 +1,6 @@
+package xmoke.controller;
+
+import xmoke.MainApp;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -5,10 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import xmoke.RoutineType;
-import xmoke.Storage;
-import xmoke.Task;
-import xmoke.User;
+import xmoke.model.RoutineType;
+import xmoke.model.Task;
+import xmoke.model.TaskList;
+import xmoke.service.RoutineService;
 
 /**
  * Controller for the edit routine view.
@@ -24,18 +27,17 @@ public class EditRoutineController {
     private VBox weeklyContainer;
 
     private MainApp mainApp;
-    private Storage storage;
+    private RoutineService routineService;
     private String userName;
-    private User user;
 
     /**
-     * Sets the main application reference and storage reference.
+     * Sets the main application reference and service reference.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-        this.storage = mainApp.getStorage();
+        this.routineService = mainApp.getRoutineService();
     }
 
     /**
@@ -45,7 +47,6 @@ public class EditRoutineController {
      */
     public void setUserName(String userName) {
         this.userName = userName;
-        this.user = storage.loadUser(userName);
         refreshView();
     }
 
@@ -55,30 +56,29 @@ public class EditRoutineController {
     private void refreshView() {
         titleLabel.setText("Tasks for " + userName);
 
+        TaskList dailyRoutines = routineService.getRoutines(userName, RoutineType.DAILY);
+        TaskList weeklyRoutines = routineService.getRoutines(userName, RoutineType.WEEKLY);
+
         dailyContainer.getChildren().clear();
-        for (Task task : user.getDailyRoutines().getAllTasks()) {
+        for (Task task : dailyRoutines.getAllTasks()) {
             HBox row = new HBox(10);
             row.getStyleClass().add("edit-row");
             Label label = new Label(task.getDescription());
             Button removeButton = new Button("Remove");
             removeButton.getStyleClass().addAll("danger", "compact");
-            removeButton.setOnAction(e -> {
-                removeRoutine(task.getDescription(), RoutineType.DAILY);
-            });
+            removeButton.setOnAction(e -> removeRoutine(task.getDescription(), RoutineType.DAILY));
             row.getChildren().addAll(label, removeButton);
             dailyContainer.getChildren().add(row);
         }
 
         weeklyContainer.getChildren().clear();
-        for (Task task : user.getWeeklyRoutines().getAllTasks()) {
+        for (Task task : weeklyRoutines.getAllTasks()) {
             HBox row = new HBox(10);
             row.getStyleClass().add("edit-row");
             Label label = new Label(task.getDescription());
             Button removeButton = new Button("Remove");
             removeButton.getStyleClass().addAll("danger", "compact");
-            removeButton.setOnAction(e -> {
-                removeRoutine(task.getDescription(), RoutineType.WEEKLY);
-            });
+            removeButton.setOnAction(e -> removeRoutine(task.getDescription(), RoutineType.WEEKLY));
             row.getChildren().addAll(label, removeButton);
             weeklyContainer.getChildren().add(row);
         }
@@ -91,22 +91,7 @@ public class EditRoutineController {
      * @param type Type of routine to remove from.
      */
     private void removeRoutine(String description, RoutineType type) {
-        if (type == RoutineType.DAILY) {
-            for (int i = 0; i < user.getDailyRoutines().size(); i++) {
-                if (user.getDailyRoutines().getTask(i).getDescription().equals(description)) {
-                    user.getDailyRoutines().removeTask(i);
-                    break;
-                }
-            }
-        } else {
-            for (int i = 0; i < user.getWeeklyRoutines().size(); i++) {
-                if (user.getWeeklyRoutines().getTask(i).getDescription().equals(description)) {
-                    user.getWeeklyRoutines().removeTask(i);
-                    break;
-                }
-            }
-        }
-        storage.saveUser(user);
+        routineService.removeRoutine(userName, description, type);
         refreshView();
     }
 
@@ -144,7 +129,8 @@ public class EditRoutineController {
                 return;
             }
 
-            if (routineExists(trimmed, type)) {
+            boolean added = routineService.addRoutine(userName, trimmed, type);
+            if (!added) {
                 showInfo(
                         "Duplicate task",
                         "This task already exists in the " + type.name().toLowerCase() + " list."
@@ -152,13 +138,6 @@ public class EditRoutineController {
                 return;
             }
 
-            if (type == RoutineType.DAILY) {
-                user.getDailyRoutines().addTask(new Task(trimmed, RoutineType.DAILY));
-            } else {
-                user.getWeeklyRoutines().addTask(new Task(trimmed, RoutineType.WEEKLY));
-            }
-
-            storage.saveUser(user);
             refreshView();
         });
     }
@@ -169,33 +148,6 @@ public class EditRoutineController {
     @FXML
     private void handleBack() {
         mainApp.showCaregiverMenuScene();
-    }
-
-    /**
-     * Checks whether a routine with the given name already exists.
-     *
-     * @param name Name of the routine.
-     * @param type Type of routine to check.
-     * @return True if the routine already exists, otherwise false.
-     */
-    private boolean routineExists(String name, RoutineType type) {
-        String trimmed = name.trim();
-
-        if (type == RoutineType.DAILY) {
-            for (Task task : user.getDailyRoutines().getAllTasks()) {
-                if (task.getDescription().equalsIgnoreCase(trimmed)) {
-                    return true;
-                }
-            }
-        } else {
-            for (Task task : user.getWeeklyRoutines().getAllTasks()) {
-                if (task.getDescription().equalsIgnoreCase(trimmed)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     /**

@@ -1,3 +1,8 @@
+package xmoke.controller;
+
+import xmoke.MainApp;
+import xmoke.service.AuthService;
+
 import java.util.List;
 
 import javafx.fxml.FXML;
@@ -12,6 +17,7 @@ public class HistorySelectUserController {
     private VBox userContainer;
 
     private MainApp mainApp;
+    private AuthService authService;
     private String period;
 
     /**
@@ -21,12 +27,13 @@ public class HistorySelectUserController {
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+        this.authService = mainApp.getAuthService();
     }
 
     /**
      * Sets the selected history period and loads the users.
      *
-     * @param period Selected period (e.g. "week").
+     * @param period Selected period.
      */
     public void setPeriod(String period) {
         this.period = period;
@@ -38,7 +45,7 @@ public class HistorySelectUserController {
      */
     private void loadUsers() {
         userContainer.getChildren().clear();
-        List<String> users = mainApp.getStorage().listSeniorNames();
+        List<String> users = authService.getSeniorNames();
 
         for (String user : users) {
             Button button = new Button(user);

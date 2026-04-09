@@ -1,3 +1,6 @@
+package xmoke.controller;
+
+import xmoke.MainApp;
 import javafx.fxml.FXML;
 
 /**
