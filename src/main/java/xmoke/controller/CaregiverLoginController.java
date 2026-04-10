@@ -34,12 +34,16 @@ public class CaregiverLoginController {
      */
     @FXML
     private void handleLogin() {
-        boolean valid = authService.validateCaregiverPassword(passwordField.getText());
-        if (valid) {
-            errorLabel.setText("");
-            mainApp.showCaregiverMenuScene();
-        } else {
-            errorLabel.setText("Wrong password, please try again.");
+        try {
+            boolean valid = authService.validateCaregiverPassword(passwordField.getText());
+            if (valid) {
+                errorLabel.setText("");
+                mainApp.showCaregiverMenuScene();
+            } else {
+                errorLabel.setText("Wrong password, please try again.");
+            }
+        } catch (RuntimeException e) {
+            errorLabel.setText("System error. Please try again later.");
         }
     }
 

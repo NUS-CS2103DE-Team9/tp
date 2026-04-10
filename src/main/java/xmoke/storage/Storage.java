@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -57,7 +58,7 @@ public class Storage {
                     .sorted(String.CASE_INSENSITIVE_ORDER)
                     .toList();
         } catch (IOException e) {
-            return new ArrayList<>();
+            throw new StorageException("Failed to list senior users.", e);
         }
     }
 
@@ -108,7 +109,7 @@ public class Storage {
             String stored = Files.readString(CAREGIVER_FILE).trim();
             return stored.equals(password);
         } catch (IOException e) {
-            return false;
+            throw new StorageException("Failed to validate caregiver password.", e);
         }
     }
 
@@ -130,7 +131,7 @@ public class Storage {
             Files.writeString(CAREGIVER_FILE, newPassword.trim());
             return true;
         } catch (IOException e) {
-            return false;
+            throw new StorageException("Failed to change caregiver password.", e);
         }
     }
 
@@ -266,7 +267,8 @@ public class Storage {
             }
 
             return day;
-        } catch (Exception e) {
+        } catch (DateTimeParseException | IOException e) {
+            System.err.println("Skipping invalid day file " + filePath + ": " + e.getMessage());
             return null;
         }
     }

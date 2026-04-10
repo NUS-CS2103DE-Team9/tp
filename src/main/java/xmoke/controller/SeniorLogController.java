@@ -46,8 +46,13 @@ public class SeniorLogController {
         this.userName = userName;
         pageTitleLabel.setText("Daily Log");
         userLabel.setText(userName);
-        logArea.setText(logService.getTodayLog(userName));
-        statusLabel.setText("");
+        try {
+            logArea.setText(logService.getTodayLog(userName));
+            statusLabel.setText("");
+        } catch (RuntimeException e) {
+            logArea.setText("");
+            statusLabel.setText("Unable to load today's log. Please try again.");
+        }
     }
 
     /**
@@ -55,9 +60,13 @@ public class SeniorLogController {
      */
     @FXML
     private void handleSubmit() {
-        logService.saveTodayLog(userName, logArea.getText());
-        statusLabel.setText("Today's record saved.");
-        mainApp.showLoginScene();
+        try {
+            logService.saveTodayLog(userName, logArea.getText());
+            statusLabel.setText("Today's record saved.");
+            mainApp.showLoginScene();
+        } catch (RuntimeException e) {
+            statusLabel.setText("Save failed. Please try again.");
+        }
     }
 
     /**

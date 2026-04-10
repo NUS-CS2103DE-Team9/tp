@@ -6,6 +6,7 @@ import xmoke.service.AuthService;
 import java.util.List;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -40,14 +41,21 @@ public class CaregiverSelectUserController {
      */
     private void loadUsers() {
         userContainer.getChildren().clear();
-        List<String> users = authService.getSeniorNames();
-
-        for (String user : users) {
-            Button button = new Button(user);
-            button.setPrefWidth(260);
-            button.getStyleClass().add("choice");
-            button.setOnAction(e -> mainApp.showEditRoutineScene(user));
-            userContainer.getChildren().add(button);
+        try {
+            List<String> users = authService.getSeniorNames();
+            for (String user : users) {
+                Button button = new Button(user);
+                button.setPrefWidth(260);
+                button.getStyleClass().add("choice");
+                button.setOnAction(e -> mainApp.showEditRoutineScene(user));
+                userContainer.getChildren().add(button);
+            }
+        } catch (RuntimeException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Load failed");
+            alert.setHeaderText("Unable to load users");
+            alert.setContentText("Please check your data files and try again.");
+            alert.showAndWait();
         }
     }
 

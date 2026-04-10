@@ -12,7 +12,7 @@ javafx {
 }
 
 application {
-    mainClass.set("Launcher")
+    mainClass.set("xmoke.Launcher")
 }
 
 repositories {
@@ -47,7 +47,7 @@ shadowJar {
     archiveBaseName = "healthcare-everyday"
     archiveClassifier = null
     manifest {
-        attributes 'Main-Class': 'Launcher'
+        attributes 'Main-Class': 'xmoke.Launcher'
     }
 }
 

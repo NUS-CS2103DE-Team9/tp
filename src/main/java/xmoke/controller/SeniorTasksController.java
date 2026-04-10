@@ -7,8 +7,6 @@ import xmoke.model.Task;
 import xmoke.model.TaskList;
 import xmoke.service.RoutineService;
 
-import java.util.List;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -70,49 +68,70 @@ public class SeniorTasksController {
         pageTitleLabel.setText("Today's Tasks");
         userLabel.setText(userName);
         statusLabel.setText("");
+        try {
+            Day today = routineService.getToday(userName);
+            TaskList dailyRoutines = routineService.getRoutines(userName, RoutineType.DAILY);
+            TaskList weeklyRoutines = routineService.getRoutines(userName, RoutineType.WEEKLY);
 
-        Day today = routineService.getToday(userName);
-        TaskList dailyRoutines = routineService.getRoutines(userName, RoutineType.DAILY);
-        TaskList weeklyRoutines = routineService.getRoutines(userName, RoutineType.WEEKLY);
+            dailyContainer.getChildren().clear();
+            if (dailyRoutines.getAllTasks().isEmpty()) {
+                dailyEmptyLabel.setVisible(true);
+                dailyEmptyLabel.setManaged(true);
+            } else {
+                dailyEmptyLabel.setVisible(false);
+                dailyEmptyLabel.setManaged(false);
 
-        dailyContainer.getChildren().clear();
-        if (dailyRoutines.getAllTasks().isEmpty()) {
+                for (Task task : dailyRoutines.getAllTasks()) {
+                    CheckBox box = new CheckBox(task.getDescription());
+                    box.setSelected(today.isDailyCompleted(task.getDescription()));
+                    box.setWrapText(true);
+                    box.setOnAction(e -> {
+                        boolean previous = !box.isSelected();
+                        try {
+                            routineService.setDailyCompleted(userName, task.getDescription(), box.isSelected());
+                            statusLabel.setText("Saved.");
+                        } catch (RuntimeException ex) {
+                            box.setSelected(previous);
+                            statusLabel.setText("Save failed. Please try again.");
+                        }
+                    });
+                    dailyContainer.getChildren().add(box);
+                }
+            }
+
+            weeklyContainer.getChildren().clear();
+            if (weeklyRoutines.getAllTasks().isEmpty()) {
+                weeklyEmptyLabel.setVisible(true);
+                weeklyEmptyLabel.setManaged(true);
+            } else {
+                weeklyEmptyLabel.setVisible(false);
+                weeklyEmptyLabel.setManaged(false);
+
+                for (Task task : weeklyRoutines.getAllTasks()) {
+                    CheckBox box = new CheckBox(task.getDescription());
+                    box.setSelected(today.isWeeklyCompleted(task.getDescription()));
+                    box.setWrapText(true);
+                    box.setOnAction(e -> {
+                        boolean previous = !box.isSelected();
+                        try {
+                            routineService.setWeeklyCompleted(userName, task.getDescription(), box.isSelected());
+                            statusLabel.setText("Saved.");
+                        } catch (RuntimeException ex) {
+                            box.setSelected(previous);
+                            statusLabel.setText("Save failed. Please try again.");
+                        }
+                    });
+                    weeklyContainer.getChildren().add(box);
+                }
+            }
+        } catch (RuntimeException e) {
+            dailyContainer.getChildren().clear();
+            weeklyContainer.getChildren().clear();
             dailyEmptyLabel.setVisible(true);
             dailyEmptyLabel.setManaged(true);
-        } else {
-            dailyEmptyLabel.setVisible(false);
-            dailyEmptyLabel.setManaged(false);
-
-            for (Task task : dailyRoutines.getAllTasks()) {
-                CheckBox box = new CheckBox(task.getDescription());
-                box.setSelected(today.isDailyCompleted(task.getDescription()));
-                box.setWrapText(true);
-                box.setOnAction(e -> {
-                    routineService.setDailyCompleted(userName, task.getDescription(), box.isSelected());
-                    statusLabel.setText("Saved.");
-                });
-                dailyContainer.getChildren().add(box);
-            }
-        }
-
-        weeklyContainer.getChildren().clear();
-        if (weeklyRoutines.getAllTasks().isEmpty()) {
             weeklyEmptyLabel.setVisible(true);
             weeklyEmptyLabel.setManaged(true);
-        } else {
-            weeklyEmptyLabel.setVisible(false);
-            weeklyEmptyLabel.setManaged(false);
-
-            for (Task task : weeklyRoutines.getAllTasks()) {
-                CheckBox box = new CheckBox(task.getDescription());
-                box.setSelected(today.isWeeklyCompleted(task.getDescription()));
-                box.setWrapText(true);
-                box.setOnAction(e -> {
-                    routineService.setWeeklyCompleted(userName, task.getDescription(), box.isSelected());
-                    statusLabel.setText("Saved.");
-                });
-                weeklyContainer.getChildren().add(box);
-            }
+            statusLabel.setText("Unable to load tasks. Please try again.");
         }
     }
 

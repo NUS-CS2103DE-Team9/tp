@@ -40,14 +40,21 @@ public class GenerateSummarySelectUserController {
      */
     private void loadUsers() {
         userContainer.getChildren().clear();
-        List<String> users = authService.getSeniorNames();
-
-        for (String userName : users) {
-            Button button = new Button(userName);
-            button.setPrefWidth(260);
-            button.getStyleClass().add("choice");
-            button.setOnAction(e -> generateSummary(userName));
-            userContainer.getChildren().add(button);
+        try {
+            List<String> users = authService.getSeniorNames();
+            for (String userName : users) {
+                Button button = new Button(userName);
+                button.setPrefWidth(260);
+                button.getStyleClass().add("choice");
+                button.setOnAction(e -> generateSummary(userName));
+                userContainer.getChildren().add(button);
+            }
+        } catch (RuntimeException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Load failed");
+            alert.setHeaderText("Unable to load users");
+            alert.setContentText("Please check your data files and try again.");
+            alert.showAndWait();
         }
     }
 
