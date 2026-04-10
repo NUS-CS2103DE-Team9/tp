@@ -31,6 +31,10 @@ checkstyle {
 
 test {
     useJUnitPlatform()
+    maxParallelForks = 1
+    minHeapSize = "64m"
+    maxHeapSize = "256m"
+    jvmArgs "-XX:+UseSerialGC"
 
     testLogging {
         events "passed", "skipped", "failed"

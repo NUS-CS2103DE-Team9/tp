@@ -18,15 +18,28 @@ import java.util.stream.Stream;
  * routines, daily records, and caregiver credentials.
  */
 public class Storage {
-    private static final Path DATA_ROOT = Paths.get("data");
-    private static final Path USERS_ROOT = DATA_ROOT.resolve("users");
-    private static final Path APP_ROOT = DATA_ROOT.resolve("app");
-    private static final Path CAREGIVER_FILE = APP_ROOT.resolve("caregiver.txt");
+    private final Path dataRoot;
+    private final Path usersRoot;
+    private final Path appRoot;
+    private final Path caregiverFile;
 
     /**
      * Initializes storage and ensures required folder structure exists.
      */
     public Storage() {
+        this(Paths.get("data"));
+    }
+
+    /**
+     * Initializes storage rooted at the provided data path.
+     *
+     * @param dataRoot Root path for all persisted app data.
+     */
+    public Storage(Path dataRoot) {
+        this.dataRoot = dataRoot;
+        this.usersRoot = this.dataRoot.resolve("users");
+        this.appRoot = this.dataRoot.resolve("app");
+        this.caregiverFile = this.appRoot.resolve("caregiver.txt");
         ensureBaseStructure();
     }
 
@@ -35,10 +48,10 @@ public class Storage {
      */
     private void ensureBaseStructure() {
         try {
-            Files.createDirectories(USERS_ROOT);
-            Files.createDirectories(APP_ROOT);
-            if (Files.notExists(CAREGIVER_FILE)) {
-                Files.writeString(CAREGIVER_FILE, "caregiver");
+            Files.createDirectories(usersRoot);
+            Files.createDirectories(appRoot);
+            if (Files.notExists(caregiverFile)) {
+                Files.writeString(caregiverFile, "caregiver");
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to initialize storage: " + e.getMessage(), e);
@@ -51,7 +64,7 @@ public class Storage {
      * @return List of user names.
      */
     public List<String> listSeniorNames() {
-        try (Stream<Path> stream = Files.list(USERS_ROOT)) {
+        try (Stream<Path> stream = Files.list(usersRoot)) {
             return stream
                     .filter(Files::isDirectory)
                     .map(this::readUserDisplayName)
@@ -106,7 +119,7 @@ public class Storage {
      */
     public boolean validateCaregiverPassword(String password) {
         try {
-            String stored = Files.readString(CAREGIVER_FILE).trim();
+            String stored = Files.readString(caregiverFile).trim();
             return stored.equals(password);
         } catch (IOException e) {
             throw new StorageException("Failed to validate caregiver password.", e);
@@ -128,7 +141,7 @@ public class Storage {
             return false;
         }
         try {
-            Files.writeString(CAREGIVER_FILE, newPassword.trim());
+            Files.writeString(caregiverFile, newPassword.trim());
             return true;
         } catch (IOException e) {
             throw new StorageException("Failed to change caregiver password.", e);
@@ -292,7 +305,7 @@ public class Storage {
      * Returns the folder path for a user.
      */
     private Path getUserFolder(String userName) {
-        return USERS_ROOT.resolve(sanitizeName(userName));
+        return usersRoot.resolve(sanitizeName(userName));
     }
 
     /**
