@@ -1,6 +1,6 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
+import HealthcareEveryday.MainApp;
 import javafx.fxml.FXML;
 
 /**

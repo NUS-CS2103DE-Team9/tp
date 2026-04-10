@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="xmoke.controller.LoginController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="HealthcareEveryday.controller.LoginController">
     <children>
         <VBox alignment="CENTER" spacing="22.0" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="40.0">

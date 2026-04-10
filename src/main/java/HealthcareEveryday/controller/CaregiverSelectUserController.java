@@ -1,19 +1,23 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
-import xmoke.service.AuthService;
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
 
 import java.util.List;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 /**
- * Controller for the login view.
+ * Controller for choosing which senior's routines to edit.
  */
-public class LoginController {
+public class CaregiverSelectUserController {
+    @FXML
+    private Label titleLabel;
+
     @FXML
     private VBox userContainer;
 
@@ -21,13 +25,14 @@ public class LoginController {
     private AuthService authService;
 
     /**
-     * Sets the main application reference and loads the users.
+     * Sets the main application reference and loads users.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         this.authService = mainApp.getAuthService();
+        titleLabel.setText("Whose tasks are we modifying?");
         loadUsers();
     }
 
@@ -36,14 +41,13 @@ public class LoginController {
      */
     private void loadUsers() {
         userContainer.getChildren().clear();
-
         try {
             List<String> users = authService.getSeniorNames();
             for (String user : users) {
                 Button button = new Button(user);
                 button.setPrefWidth(260);
                 button.getStyleClass().add("choice");
-                button.setOnAction(e -> mainApp.showSeniorTasksScene(user));
+                button.setOnAction(e -> mainApp.showEditRoutineScene(user));
                 userContainer.getChildren().add(button);
             }
         } catch (RuntimeException e) {
@@ -56,10 +60,10 @@ public class LoginController {
     }
 
     /**
-     * Opens the caregiver login scene.
+     * Returns the user to the caregiver menu scene.
      */
     @FXML
-    private void handleCaregiver() {
-        mainApp.showCaregiverLoginScene();
+    private void handleBack() {
+        mainApp.showCaregiverMenuScene();
     }
 }

@@ -1,4 +1,4 @@
-package xmoke;
+package HealthcareEveryday;
 
 /**
  * Plain launcher for the application; JAR manifest Main-Class should point here.

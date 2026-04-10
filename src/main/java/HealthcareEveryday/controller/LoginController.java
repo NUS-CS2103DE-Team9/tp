@@ -1,43 +1,33 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
-import xmoke.service.AuthService;
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
 
 import java.util.List;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
 
 /**
- * Controller for the history user selection view.
+ * Controller for the login view.
  */
-public class HistorySelectUserController {
+public class LoginController {
     @FXML
     private VBox userContainer;
 
     private MainApp mainApp;
     private AuthService authService;
-    private String period;
 
     /**
-     * Sets the main application reference for scene switching.
+     * Sets the main application reference and loads the users.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         this.authService = mainApp.getAuthService();
-    }
-
-    /**
-     * Sets the selected history period and loads the users.
-     *
-     * @param period Selected period.
-     */
-    public void setPeriod(String period) {
-        this.period = period;
         loadUsers();
     }
 
@@ -46,17 +36,14 @@ public class HistorySelectUserController {
      */
     private void loadUsers() {
         userContainer.getChildren().clear();
+
         try {
             List<String> users = authService.getSeniorNames();
             for (String user : users) {
                 Button button = new Button(user);
                 button.setPrefWidth(260);
                 button.getStyleClass().add("choice");
-                button.setOnAction(e -> {
-                    if ("week".equals(period)) {
-                        mainApp.showWeeklyHistoryScene(user);
-                    }
-                });
+                button.setOnAction(e -> mainApp.showSeniorTasksScene(user));
                 userContainer.getChildren().add(button);
             }
         } catch (RuntimeException e) {
@@ -69,10 +56,10 @@ public class HistorySelectUserController {
     }
 
     /**
-     * Returns the user to the history period selection scene.
+     * Opens the caregiver login scene.
      */
     @FXML
-    private void handleBack() {
-        mainApp.showHistoryPeriodScene();
+    private void handleCaregiver() {
+        mainApp.showCaregiverLoginScene();
     }
 }

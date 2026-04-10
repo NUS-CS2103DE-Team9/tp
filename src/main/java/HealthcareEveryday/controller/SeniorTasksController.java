@@ -1,11 +1,11 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
-import xmoke.model.Day;
-import xmoke.model.RoutineType;
-import xmoke.model.Task;
-import xmoke.model.TaskList;
-import xmoke.service.RoutineService;
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.model.Day;
+import HealthcareEveryday.model.RoutineType;
+import HealthcareEveryday.model.Task;
+import HealthcareEveryday.model.TaskList;
+import HealthcareEveryday.service.RoutineService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;

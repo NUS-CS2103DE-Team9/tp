@@ -1,7 +1,7 @@
-package xmoke.service;
+package HealthcareEveryday.service;
 
-import xmoke.model.User;
-import xmoke.storage.Storage;
+import HealthcareEveryday.model.User;
+import HealthcareEveryday.storage.Storage;
 
 import java.nio.file.Path;
 

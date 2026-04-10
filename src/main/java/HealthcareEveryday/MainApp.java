@@ -1,4 +1,4 @@
-package xmoke;
+package HealthcareEveryday;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,24 +7,24 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import xmoke.controller.CaregiverLoginController;
-import xmoke.controller.CaregiverMenuController;
-import xmoke.controller.CaregiverSelectUserController;
-import xmoke.controller.EditRoutineController;
-import xmoke.controller.GenerateSummarySelectUserController;
-import xmoke.controller.HistoryPeriodController;
-import xmoke.controller.HistorySelectUserController;
-import xmoke.controller.LoginController;
-import xmoke.controller.SeniorLogController;
-import xmoke.controller.SeniorTasksController;
-import xmoke.controller.TodayHistoryController;
-import xmoke.controller.WeeklyHistoryController;
-import xmoke.service.AuthService;
-import xmoke.service.HistoryService;
-import xmoke.service.LogService;
-import xmoke.service.RoutineService;
-import xmoke.service.SummaryService;
-import xmoke.storage.Storage;
+import HealthcareEveryday.controller.CaregiverLoginController;
+import HealthcareEveryday.controller.CaregiverMenuController;
+import HealthcareEveryday.controller.CaregiverSelectUserController;
+import HealthcareEveryday.controller.EditRoutineController;
+import HealthcareEveryday.controller.GenerateSummarySelectUserController;
+import HealthcareEveryday.controller.HistoryPeriodController;
+import HealthcareEveryday.controller.HistorySelectUserController;
+import HealthcareEveryday.controller.LoginController;
+import HealthcareEveryday.controller.SeniorLogController;
+import HealthcareEveryday.controller.SeniorTasksController;
+import HealthcareEveryday.controller.TodayHistoryController;
+import HealthcareEveryday.controller.WeeklyHistoryController;
+import HealthcareEveryday.service.AuthService;
+import HealthcareEveryday.service.HistoryService;
+import HealthcareEveryday.service.LogService;
+import HealthcareEveryday.service.RoutineService;
+import HealthcareEveryday.service.SummaryService;
+import HealthcareEveryday.storage.Storage;
 
 /**
  * Main JavaFX application for the Healthcare Everyday app.

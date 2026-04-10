@@ -1,7 +1,7 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
-import xmoke.service.HistoryService;
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.HistoryService;
 
 import java.util.List;
 

@@ -75,7 +75,7 @@
         <mxCell id="pnqJQnfLy_B0_AeNtT4u-96" parent="pnqJQnfLy_B0_AeNtT4u-94" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;monospace&quot;&gt;+&amp;nbsp;&lt;/font&gt;generateMonthlySummary(user : User) : Path" vertex="1">
           <mxGeometry height="26" width="340" y="34" as="geometry" />
         </mxCell>
-        <mxCell id="pnqJQnfLy_B0_AeNtT4u-97" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="xmoke.MainApp" vertex="1">
+        <mxCell id="pnqJQnfLy_B0_AeNtT4u-97" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="HealthcareEveryday.MainApp" vertex="1">
           <mxGeometry height="310" width="290" x="440" y="90" as="geometry" />
         </mxCell>
         <mxCell id="pnqJQnfLy_B0_AeNtT4u-98" parent="pnqJQnfLy_B0_AeNtT4u-97" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ primaryStage : Stage&lt;/div&gt;&lt;div&gt;+ storage : Storage&lt;/div&gt;" vertex="1">
@@ -90,13 +90,13 @@
         <mxCell id="pnqJQnfLy_B0_AeNtT4u-101" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Controller" vertex="1">
           <mxGeometry height="120" width="290" x="800" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="pnqJQnfLy_B0_AeNtT4u-102" parent="pnqJQnfLy_B0_AeNtT4u-101" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;- mainApp: xmoke.MainApp&lt;/div&gt;&lt;div&gt;- ...&lt;/div&gt;" vertex="1">
+        <mxCell id="pnqJQnfLy_B0_AeNtT4u-102" parent="pnqJQnfLy_B0_AeNtT4u-101" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;- mainApp: HealthcareEveryday.MainApp&lt;/div&gt;&lt;div&gt;- ...&lt;/div&gt;" vertex="1">
           <mxGeometry height="44" width="290" y="26" as="geometry" />
         </mxCell>
         <mxCell id="pnqJQnfLy_B0_AeNtT4u-103" parent="pnqJQnfLy_B0_AeNtT4u-101" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
           <mxGeometry height="8" width="290" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="pnqJQnfLy_B0_AeNtT4u-104" parent="pnqJQnfLy_B0_AeNtT4u-101" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ setMainApp(mainApp : xmoke.MainApp) : void&lt;div&gt;+ ...&lt;/div&gt;" vertex="1">
+        <mxCell id="pnqJQnfLy_B0_AeNtT4u-104" parent="pnqJQnfLy_B0_AeNtT4u-101" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ setMainApp(mainApp : HealthcareEveryday.MainApp) : void&lt;div&gt;+ ...&lt;/div&gt;" vertex="1">
           <mxGeometry height="42" width="290" y="78" as="geometry" />
         </mxCell>
         <mxCell id="pnqJQnfLy_B0_AeNtT4u-112" edge="1" parent="1" source="pnqJQnfLy_B0_AeNtT4u-73" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=1;align=left;verticalAlign=bottom;rounded=0;exitX=0.498;exitY=1.018;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="pnqJQnfLy_B0_AeNtT4u-66" value="1">

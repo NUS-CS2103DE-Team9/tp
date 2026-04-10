@@ -1,9 +1,9 @@
-package xmoke.service;
+package HealthcareEveryday.service;
 
-import xmoke.model.Day;
-import xmoke.model.Task;
-import xmoke.model.User;
-import xmoke.storage.Storage;
+import HealthcareEveryday.model.Day;
+import HealthcareEveryday.model.Task;
+import HealthcareEveryday.model.User;
+import HealthcareEveryday.storage.Storage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

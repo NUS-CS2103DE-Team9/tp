@@ -1,7 +1,7 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
-import xmoke.service.AuthService;
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
 
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
+import HealthcareEveryday.MainApp;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -8,10 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import xmoke.model.RoutineType;
-import xmoke.model.Task;
-import xmoke.model.TaskList;
-import xmoke.service.RoutineService;
+import HealthcareEveryday.model.RoutineType;
+import HealthcareEveryday.model.Task;
+import HealthcareEveryday.model.TaskList;
+import HealthcareEveryday.service.RoutineService;
 
 /**
  * Controller for the edit routine view.

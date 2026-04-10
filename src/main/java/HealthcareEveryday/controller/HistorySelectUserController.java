@@ -1,38 +1,43 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
-import xmoke.service.AuthService;
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
 
 import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 /**
- * Controller for choosing which senior's routines to edit.
+ * Controller for the history user selection view.
  */
-public class CaregiverSelectUserController {
-    @FXML
-    private Label titleLabel;
-
+public class HistorySelectUserController {
     @FXML
     private VBox userContainer;
 
     private MainApp mainApp;
     private AuthService authService;
+    private String period;
 
     /**
-     * Sets the main application reference and loads users.
+     * Sets the main application reference for scene switching.
      *
      * @param mainApp Main application instance.
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         this.authService = mainApp.getAuthService();
-        titleLabel.setText("Whose tasks are we modifying?");
+    }
+
+    /**
+     * Sets the selected history period and loads the users.
+     *
+     * @param period Selected period.
+     */
+    public void setPeriod(String period) {
+        this.period = period;
         loadUsers();
     }
 
@@ -47,7 +52,11 @@ public class CaregiverSelectUserController {
                 Button button = new Button(user);
                 button.setPrefWidth(260);
                 button.getStyleClass().add("choice");
-                button.setOnAction(e -> mainApp.showEditRoutineScene(user));
+                button.setOnAction(e -> {
+                    if ("week".equals(period)) {
+                        mainApp.showWeeklyHistoryScene(user);
+                    }
+                });
                 userContainer.getChildren().add(button);
             }
         } catch (RuntimeException e) {
@@ -60,10 +69,10 @@ public class CaregiverSelectUserController {
     }
 
     /**
-     * Returns the user to the caregiver menu scene.
+     * Returns the user to the history period selection scene.
      */
     @FXML
     private void handleBack() {
-        mainApp.showCaregiverMenuScene();
+        mainApp.showHistoryPeriodScene();
     }
 }

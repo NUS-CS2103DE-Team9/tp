@@ -1,4 +1,4 @@
-package xmoke.model;
+package HealthcareEveryday.model;
 
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;

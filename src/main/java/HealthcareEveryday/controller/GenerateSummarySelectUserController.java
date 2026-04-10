@@ -1,8 +1,8 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
-import xmoke.service.AuthService;
-import xmoke.service.SummaryService;
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
+import HealthcareEveryday.service.SummaryService;
 
 import java.nio.file.Path;
 import java.util.List;

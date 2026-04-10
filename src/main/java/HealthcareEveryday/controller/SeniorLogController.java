@@ -1,7 +1,7 @@
-package xmoke.controller;
+package HealthcareEveryday.controller;
 
-import xmoke.MainApp;
-import xmoke.service.LogService;
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.LogService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

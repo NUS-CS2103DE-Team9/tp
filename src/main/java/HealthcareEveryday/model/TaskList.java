@@ -1,4 +1,4 @@
-package xmoke.model;
+package HealthcareEveryday.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="xmoke.controller.EditRoutineController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="HealthcareEveryday.controller.EditRoutineController">
     <children>
         <VBox spacing="18.0" AnchorPane.topAnchor="24.0" AnchorPane.leftAnchor="24.0"
               AnchorPane.rightAnchor="24.0" AnchorPane.bottomAnchor="24.0">
