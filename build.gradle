@@ -12,7 +12,7 @@ javafx {
 }
 
 application {
-    mainClass.set("Launcher")
+    mainClass.set("HealthcareEveryday.Launcher")
 }
 
 repositories {
@@ -31,6 +31,10 @@ checkstyle {
 
 test {
     useJUnitPlatform()
+    maxParallelForks = 1
+    minHeapSize = "64m"
+    maxHeapSize = "256m"
+    jvmArgs "-XX:+UseSerialGC"
 
     testLogging {
         events "passed", "skipped", "failed"
@@ -47,7 +51,7 @@ shadowJar {
     archiveBaseName = "healthcare-everyday"
     archiveClassifier = null
     manifest {
-        attributes 'Main-Class': 'Launcher'
+        attributes 'Main-Class': 'HealthcareEveryday.Launcher'
     }
 }
 

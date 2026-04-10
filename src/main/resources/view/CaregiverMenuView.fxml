@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="xmoke.controller.CaregiverMenuController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="HealthcareEveryday.controller.CaregiverMenuController">
     <children>
         <VBox alignment="CENTER" spacing="14.0" AnchorPane.topAnchor="36.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="36.0">

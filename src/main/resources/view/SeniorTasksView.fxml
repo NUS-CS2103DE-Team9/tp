@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="xmoke.controller.SeniorTasksController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="HealthcareEveryday.controller.SeniorTasksController">
     <children>
         <VBox spacing="16.0" AnchorPane.topAnchor="24.0" AnchorPane.leftAnchor="24.0"
               AnchorPane.rightAnchor="24.0" AnchorPane.bottomAnchor="24.0">

@@ -5,7 +5,7 @@
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
-        <mxCell id="title" parent="1" value="Sequence: senior toggles task checkbox (xmoke.controller.SeniorTasksController)" style="text;html=1;fontSize=14;fontStyle=1" vertex="1">
+        <mxCell id="title" parent="1" value="Sequence: senior toggles task checkbox (HealthcareEveryday.controller.SeniorTasksController)" style="text;html=1;fontSize=14;fontStyle=1" vertex="1">
           <mxGeometry x="40" y="20" width="520" height="30" as="geometry" />
         </mxCell>
         <mxCell id="note" parent="1" value="Full set of scenarios: docs/SEQUENCE_DIAGRAMS.md" style="text;html=1;fontSize=11;fontColor=#666666" vertex="1">
@@ -19,7 +19,7 @@
           <mxGeometry x="70" y="170" width="10" height="420" as="geometry" />
         </mxCell>
 
-        <mxCell id="stc" parent="1" value="xmoke.controller.SeniorTasksController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;" vertex="1">
+        <mxCell id="stc" parent="1" value="HealthcareEveryday.controller.SeniorTasksController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;" vertex="1">
           <mxGeometry x="220" y="100" width="130" height="490" as="geometry" />
         </mxCell>
         <mxCell id="act-stc" parent="stc" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;" vertex="1">
