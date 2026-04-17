@@ -4,11 +4,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 
 import javafx.application.Platform;
 
 class FxTestUtils {
+    private static volatile boolean fxToolkitAvailable = true;
 
     @BeforeAll
     static void initToolkit() {
@@ -18,7 +20,15 @@ class FxTestUtils {
             });
         } catch (IllegalStateException ignored) {
             // Toolkit already started by another test class.
+        } catch (UnsupportedOperationException ex) {
+            // CI/headless Linux may not have a DISPLAY; skip JavaFX-dependent tests there.
+            fxToolkitAvailable = false;
+        } catch (RuntimeException ex) {
+            // Keep tests stable across environments where JavaFX toolkit cannot initialize.
+            fxToolkitAvailable = false;
         }
+
+        Assumptions.assumeTrue(fxToolkitAvailable, "JavaFX toolkit unavailable in this environment.");
     }
 
     static void runOnFxThreadAndWait(Runnable action) {

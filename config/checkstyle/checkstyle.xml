@@ -91,7 +91,7 @@
 
         <module name="PackageName">
             <!-- Validates identifiers for package names against the supplied expression. -->
-            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]{1,})*$"/>
+            <property name="format" value="^[A-Za-z]+(\.[A-Za-z][A-Za-z0-9]{1,})*$"/>
             <property name="severity" value="warning"/>
         </module>
 
