@@ -8,9 +8,10 @@ Healthcare Everyday is an offline-first JavaFX desktop app for seniors and careg
 
 ---
 
-## User guide
+## Guides
 
-- End-user instructions: [`/docs/USER_GUIDE.md`](/docs/USER_GUIDE.md)
+- User Guide: [`/docs/USER_GUIDE.md`](/docs/USER_GUIDE.md)
+- Developer Guide: [`/docs/DEVELOPER_GUIDE.md`](/docs/DEVELOPER_GUIDE.md)
 
 ---
 
