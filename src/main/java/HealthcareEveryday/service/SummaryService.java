@@ -1,9 +1,9 @@
 package HealthcareEveryday.service;
 
+import java.nio.file.Path;
+
 import HealthcareEveryday.model.User;
 import HealthcareEveryday.storage.Storage;
-
-import java.nio.file.Path;
 
 /**
  * Handles summary generation logic.

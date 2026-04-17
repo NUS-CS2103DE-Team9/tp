@@ -1,18 +1,19 @@
 package HealthcareEveryday.tests;
 
-import HealthcareEveryday.controller.CaregiverLoginController;
-import HealthcareEveryday.service.AuthService;
-import HealthcareEveryday.storage.Storage;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import HealthcareEveryday.controller.CaregiverLoginController;
+import HealthcareEveryday.service.AuthService;
+import HealthcareEveryday.storage.Storage;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 
 class CaregiverLoginControllerTest extends FxTestUtils {
 

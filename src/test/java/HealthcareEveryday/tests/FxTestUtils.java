@@ -1,11 +1,12 @@
 package HealthcareEveryday.tests;
 
-import javafx.application.Platform;
-import org.junit.jupiter.api.BeforeAll;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.junit.jupiter.api.BeforeAll;
+
+import javafx.application.Platform;
 
 class FxTestUtils {
 

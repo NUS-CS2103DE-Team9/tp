@@ -2,7 +2,6 @@ package HealthcareEveryday.controller;
 
 import HealthcareEveryday.MainApp;
 import HealthcareEveryday.service.LogService;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -63,8 +62,7 @@ public class SeniorLogController {
         try {
             String todayLog = logService.getTodayLog(userName);
             showLoadedLog(todayLog);
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             showLoadFailure();
         }
     }
@@ -96,8 +94,7 @@ public class SeniorLogController {
             logService.saveTodayLog(userName, logArea.getText());
             showSaveSuccess();
             mainApp.showLoginScene();
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             showSaveFailure();
         }
     }

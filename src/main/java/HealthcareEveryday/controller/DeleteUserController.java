@@ -1,11 +1,10 @@
 package HealthcareEveryday.controller;
 
-import HealthcareEveryday.MainApp;
-import HealthcareEveryday.service.AuthService;
-
 import java.util.List;
 import java.util.Optional;
 
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -77,10 +76,16 @@ public class DeleteUserController {
         boolean deleted = authService.deleteUser(userName);
 
         if (deleted) {
-            showInfo("Success", "User \"" + userName + "\" has been deleted.");
+            showInfo(
+                    "Success",
+                    "User \"" + userName + "\" has been deleted."
+            );
             loadUsers();
         } else {
-            showError("Delete failed", "Unable to delete user \"" + userName + "\".");
+            showError(
+                    "Delete failed",
+                    "Unable to delete user \"" + userName + "\"."
+            );
         }
     }
 
@@ -93,8 +98,12 @@ public class DeleteUserController {
     private boolean isDeleteConfirmed(String userName) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Delete");
-        alert.setHeaderText("Delete user \"" + userName + "\"?");
-        alert.setContentText("This will permanently remove the user and all saved data.");
+        alert.setHeaderText(
+                "Delete user \"" + userName + "\"?"
+        );
+        alert.setContentText(
+                "This will permanently remove the user and all saved data."
+        );
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;

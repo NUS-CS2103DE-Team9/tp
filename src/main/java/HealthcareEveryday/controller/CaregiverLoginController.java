@@ -39,12 +39,10 @@ public class CaregiverLoginController {
 
             if (valid) {
                 handleSuccessfulLogin();
-            }
-            else {
+            } else {
                 showWrongPassword();
             }
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             showSystemError();
         }
     }

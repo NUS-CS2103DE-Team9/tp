@@ -1,14 +1,14 @@
 package HealthcareEveryday.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import HealthcareEveryday.model.Day;
 import HealthcareEveryday.model.Task;
 import HealthcareEveryday.model.TaskList;
 import HealthcareEveryday.model.User;
 import HealthcareEveryday.storage.Storage;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Handles history-related logic.
@@ -185,8 +185,7 @@ public class HistoryService {
 
             if (done) {
                 completedCount++;
-            }
-            else {
+            } else {
                 missedDays.add(formatDayName(date));
             }
         }
@@ -239,8 +238,7 @@ public class HistoryService {
 
         if (isDaily) {
             return day.isDailyCompleted(taskName);
-        }
-        else {
+        } else {
             return day.isWeeklyCompleted(taskName);
         }
     }
@@ -263,15 +261,31 @@ public class HistoryService {
         private final String taskName;
         private final boolean completed;
 
+        /**
+         * Creates a task completion status.
+         *
+         * @param taskName Name of the task.
+         * @param completed Whether the task is completed.
+         */
         public TaskStatus(String taskName, boolean completed) {
             this.taskName = taskName;
             this.completed = completed;
         }
 
+        /**
+         * Returns the task name.
+         *
+         * @return Task name.
+         */
         public String getTaskName() {
             return taskName;
         }
 
+        /**
+         * Returns whether the task is completed.
+         *
+         * @return True if completed, otherwise false.
+         */
         public boolean isCompleted() {
             return completed;
         }
@@ -285,20 +299,42 @@ public class HistoryService {
         private final List<TaskStatus> dailyTasks;
         private final List<TaskStatus> weeklyTasks;
 
+        /**
+         * Creates today's history for one user.
+         *
+         * @param userName Name of the user.
+         * @param dailyTasks Daily task statuses.
+         * @param weeklyTasks Weekly task statuses.
+         */
         public TodayUserHistory(String userName, List<TaskStatus> dailyTasks, List<TaskStatus> weeklyTasks) {
             this.userName = userName;
             this.dailyTasks = dailyTasks;
             this.weeklyTasks = weeklyTasks;
         }
 
+        /**
+         * Returns the user name.
+         *
+         * @return User name.
+         */
         public String getUserName() {
             return userName;
         }
 
+        /**
+         * Returns the daily task statuses.
+         *
+         * @return Daily task statuses.
+         */
         public List<TaskStatus> getDailyTasks() {
             return dailyTasks;
         }
 
+        /**
+         * Returns the weekly task statuses.
+         *
+         * @return Weekly task statuses.
+         */
         public List<TaskStatus> getWeeklyTasks() {
             return weeklyTasks;
         }
@@ -312,20 +348,42 @@ public class HistoryService {
         private final int completedCount;
         private final List<String> missedDays;
 
+        /**
+         * Creates weekly history for one daily task.
+         *
+         * @param taskName Name of the task.
+         * @param completedCount Number of days completed.
+         * @param missedDays Days on which the task was missed.
+         */
         public DailyTaskWeeklyRecord(String taskName, int completedCount, List<String> missedDays) {
             this.taskName = taskName;
             this.completedCount = completedCount;
             this.missedDays = missedDays;
         }
 
+        /**
+         * Returns the task name.
+         *
+         * @return Task name.
+         */
         public String getTaskName() {
             return taskName;
         }
 
+        /**
+         * Returns the completed count.
+         *
+         * @return Number of completed days.
+         */
         public int getCompletedCount() {
             return completedCount;
         }
 
+        /**
+         * Returns the missed days.
+         *
+         * @return Missed day names.
+         */
         public List<String> getMissedDays() {
             return missedDays;
         }
@@ -339,20 +397,42 @@ public class HistoryService {
         private final boolean doneThisWeek;
         private final List<String> doneDays;
 
+        /**
+         * Creates weekly history for one weekly task.
+         *
+         * @param taskName Name of the task.
+         * @param doneThisWeek Whether the task was done this week.
+         * @param doneDays Days on which the task was marked done.
+         */
         public WeeklyTaskWeeklyRecord(String taskName, boolean doneThisWeek, List<String> doneDays) {
             this.taskName = taskName;
             this.doneThisWeek = doneThisWeek;
             this.doneDays = doneDays;
         }
 
+        /**
+         * Returns the task name.
+         *
+         * @return Task name.
+         */
         public String getTaskName() {
             return taskName;
         }
 
+        /**
+         * Returns whether the task was done this week.
+         *
+         * @return True if done this week, otherwise false.
+         */
         public boolean isDoneThisWeek() {
             return doneThisWeek;
         }
 
+        /**
+         * Returns the days on which the task was marked done.
+         *
+         * @return Done day names.
+         */
         public List<String> getDoneDays() {
             return doneDays;
         }
@@ -368,6 +448,15 @@ public class HistoryService {
         private final List<DailyTaskWeeklyRecord> dailyRecords;
         private final List<WeeklyTaskWeeklyRecord> weeklyRecords;
 
+        /**
+         * Creates the full weekly history for one user.
+         *
+         * @param userName Name of the user.
+         * @param startDate Start date of the history window.
+         * @param endDate End date of the history window.
+         * @param dailyRecords Daily routine records.
+         * @param weeklyRecords Weekly routine records.
+         */
         public WeeklyUserHistory(
                 String userName,
                 LocalDate startDate,
@@ -382,22 +471,47 @@ public class HistoryService {
             this.weeklyRecords = weeklyRecords;
         }
 
+        /**
+         * Returns the user name.
+         *
+         * @return User name.
+         */
         public String getUserName() {
             return userName;
         }
 
+        /**
+         * Returns the start date.
+         *
+         * @return Start date.
+         */
         public LocalDate getStartDate() {
             return startDate;
         }
 
+        /**
+         * Returns the end date.
+         *
+         * @return End date.
+         */
         public LocalDate getEndDate() {
             return endDate;
         }
 
+        /**
+         * Returns the daily records.
+         *
+         * @return Daily routine records.
+         */
         public List<DailyTaskWeeklyRecord> getDailyRecords() {
             return dailyRecords;
         }
 
+        /**
+         * Returns the weekly records.
+         *
+         * @return Weekly routine records.
+         */
         public List<WeeklyTaskWeeklyRecord> getWeeklyRecords() {
             return weeklyRecords;
         }

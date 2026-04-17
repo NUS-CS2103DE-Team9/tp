@@ -1,12 +1,11 @@
 package HealthcareEveryday.controller;
 
-import HealthcareEveryday.MainApp;
-import HealthcareEveryday.service.AuthService;
-import HealthcareEveryday.service.SummaryService;
-
 import java.nio.file.Path;
 import java.util.List;
 
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
+import HealthcareEveryday.service.SummaryService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -50,8 +49,7 @@ public class GenerateSummarySelectUserController {
                 Button button = createUserButton(userName);
                 userContainer.getChildren().add(button);
             }
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             showLoadFailedAlert();
         }
     }
@@ -79,8 +77,7 @@ public class GenerateSummarySelectUserController {
         try {
             Path reportPath = summaryService.generateMonthlySummary(userName);
             showReportGeneratedAlert(userName, reportPath);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             showGenerationFailedAlert(e.getMessage());
         }
     }

@@ -1,5 +1,7 @@
 package HealthcareEveryday.controller;
 
+import java.util.Optional;
+
 import HealthcareEveryday.MainApp;
 import HealthcareEveryday.model.RoutineType;
 import HealthcareEveryday.model.Task;
@@ -12,8 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.util.Optional;
 
 /**
  * Controller for the edit routine view.

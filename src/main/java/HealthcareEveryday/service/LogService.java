@@ -1,10 +1,10 @@
 package HealthcareEveryday.service;
 
+import java.time.LocalDate;
+
 import HealthcareEveryday.model.Day;
 import HealthcareEveryday.model.User;
 import HealthcareEveryday.storage.Storage;
-
-import java.time.LocalDate;
 
 /**
  * Handles daily log-related logic.

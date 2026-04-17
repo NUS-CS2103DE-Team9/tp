@@ -1,15 +1,9 @@
 package HealthcareEveryday;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import HealthcareEveryday.controller.CaregiverLoginController;
 import HealthcareEveryday.controller.CaregiverMenuController;
 import HealthcareEveryday.controller.CaregiverSelectUserController;
+import HealthcareEveryday.controller.DeleteUserController;
 import HealthcareEveryday.controller.EditRoutineController;
 import HealthcareEveryday.controller.GenerateSummarySelectUserController;
 import HealthcareEveryday.controller.HistoryPeriodController;
@@ -19,13 +13,19 @@ import HealthcareEveryday.controller.SeniorLogController;
 import HealthcareEveryday.controller.SeniorTasksController;
 import HealthcareEveryday.controller.TodayHistoryController;
 import HealthcareEveryday.controller.WeeklyHistoryController;
-import HealthcareEveryday.controller.DeleteUserController;
 import HealthcareEveryday.service.AuthService;
 import HealthcareEveryday.service.HistoryService;
 import HealthcareEveryday.service.LogService;
 import HealthcareEveryday.service.RoutineService;
 import HealthcareEveryday.service.SummaryService;
 import HealthcareEveryday.storage.Storage;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * Main JavaFX application for the Healthcare Everyday app.
@@ -40,8 +40,6 @@ public class MainApp extends Application {
     private final LogService logService = new LogService(storage);
     private final HistoryService historyService = new HistoryService(storage);
     private final SummaryService summaryService = new SummaryService(storage);
-
-
 
     /**
      * Attaches the shared application stylesheet to a scene.

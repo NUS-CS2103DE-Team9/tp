@@ -1,8 +1,8 @@
 package HealthcareEveryday.service;
 
-import HealthcareEveryday.storage.Storage;
-
 import java.util.List;
+
+import HealthcareEveryday.storage.Storage;
 
 /**
  * Handles login-related and caregiver account-related logic.

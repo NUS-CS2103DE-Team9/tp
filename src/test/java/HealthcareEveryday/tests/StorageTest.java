@@ -1,21 +1,22 @@
 package HealthcareEveryday.tests;
 
-import HealthcareEveryday.model.Day;
-import HealthcareEveryday.model.RoutineType;
-import HealthcareEveryday.model.Task;
-import HealthcareEveryday.model.User;
-import HealthcareEveryday.storage.Storage;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import HealthcareEveryday.model.Day;
+import HealthcareEveryday.model.RoutineType;
+import HealthcareEveryday.model.Task;
+import HealthcareEveryday.model.User;
+import HealthcareEveryday.storage.Storage;
 
 class StorageTest {
 

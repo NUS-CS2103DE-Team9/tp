@@ -1,13 +1,13 @@
 package HealthcareEveryday.service;
 
+import java.time.LocalDate;
+
 import HealthcareEveryday.model.Day;
 import HealthcareEveryday.model.RoutineType;
 import HealthcareEveryday.model.Task;
 import HealthcareEveryday.model.TaskList;
 import HealthcareEveryday.model.User;
 import HealthcareEveryday.storage.Storage;
-
-import java.time.LocalDate;
 
 /**
  * Handles routine-related application logic.
@@ -205,8 +205,7 @@ public class RoutineService {
     private TaskList getTaskList(User user, RoutineType routineType) {
         if (routineType == RoutineType.DAILY) {
             return user.getDailyRoutines();
-        }
-        else {
+        } else {
             return user.getWeeklyRoutines();
         }
     }

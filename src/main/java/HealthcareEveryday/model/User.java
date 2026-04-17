@@ -143,8 +143,7 @@ public class User {
             if (day.getDate().isBefore(date)) {
                 if (previousDay == null) {
                     previousDay = day;
-                }
-                else if (day.getDate().isAfter(previousDay.getDate())) {
+                } else if (day.getDate().isAfter(previousDay.getDate())) {
                     previousDay = day;
                 }
             }

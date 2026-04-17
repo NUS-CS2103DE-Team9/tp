@@ -1,10 +1,9 @@
 package HealthcareEveryday.controller;
 
-import HealthcareEveryday.MainApp;
-import HealthcareEveryday.service.HistoryService;
-
 import java.util.List;
 
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.HistoryService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -123,8 +122,7 @@ public class TodayHistoryController {
     private String buildTaskMark(HistoryService.TaskStatus taskStatus) {
         if (taskStatus.isCompleted()) {
             return "[✓] ";
-        }
-        else {
+        } else {
             return "[ ] ";
         }
     }

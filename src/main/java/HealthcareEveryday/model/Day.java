@@ -46,8 +46,7 @@ public class Day {
     public String getLog() {
         if (log == null) {
             return "";
-        }
-        else {
+        } else {
             return log;
         }
     }
@@ -60,8 +59,7 @@ public class Day {
     public void setLog(String log) {
         if (log == null) {
             this.log = "";
-        }
-        else {
+        } else {
             this.log = log;
         }
     }
@@ -95,8 +93,7 @@ public class Day {
 
         if (completed == null) {
             return false;
-        }
-        else {
+        } else {
             return completed;
         }
     }
@@ -112,8 +109,7 @@ public class Day {
 
         if (completed == null) {
             return false;
-        }
-        else {
+        } else {
             return completed;
         }
     }

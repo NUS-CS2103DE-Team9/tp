@@ -1,11 +1,5 @@
 package HealthcareEveryday.storage;
 
-import HealthcareEveryday.model.Day;
-import HealthcareEveryday.model.RoutineType;
-import HealthcareEveryday.model.Task;
-import HealthcareEveryday.model.TaskList;
-import HealthcareEveryday.model.User;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +10,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
+
+import HealthcareEveryday.model.Day;
+import HealthcareEveryday.model.RoutineType;
+import HealthcareEveryday.model.Task;
+import HealthcareEveryday.model.TaskList;
+import HealthcareEveryday.model.User;
 
 /**
  * Handles reading and writing of all application data, including users,
@@ -52,7 +52,9 @@ public class Storage {
         this.dataRoot = dataRoot;
         this.usersRoot = this.dataRoot.resolve("users");
         this.appRoot = this.dataRoot.resolve("app");
-        this.caregiverFile = this.appRoot.resolve("caregiver.txt");
+        this.caregiverFile = this.appRoot.resolve(
+                "caregiver.txt"
+        );
         ensureBaseStructure();
     }
 
@@ -67,9 +69,10 @@ public class Storage {
             if (Files.notExists(caregiverFile)) {
                 Files.writeString(caregiverFile, "caregiver");
             }
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Failed to initialize storage: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Failed to initialize storage: "
+                            + e.getMessage(), e);
         }
     }
 
@@ -85,9 +88,10 @@ public class Storage {
                     .map(this::readUserDisplayName)
                     .sorted(String.CASE_INSENSITIVE_ORDER)
                     .toList();
-        }
-        catch (IOException e) {
-            throw new StorageException("Failed to list senior users.", e);
+        } catch (IOException e) {
+            throw new StorageException(
+                    "Failed to list senior users.", e
+            );
         }
     }
 
@@ -156,8 +160,7 @@ public class Storage {
         try {
             deleteUserFolder(trimmed);
             return true;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return false;
         }
     }
@@ -172,9 +175,10 @@ public class Storage {
         try {
             String stored = Files.readString(caregiverFile).trim();
             return stored.equals(password);
-        }
-        catch (IOException e) {
-            throw new StorageException("Failed to validate caregiver password.", e);
+        } catch (IOException e) {
+            throw new StorageException(
+                    "Failed to validate caregiver password.", e
+            );
         }
     }
 
@@ -185,7 +189,9 @@ public class Storage {
      * @param newPassword New password.
      * @return True if changed successfully.
      */
-    public boolean changeCaregiverPassword(String oldPassword, String newPassword) {
+    public boolean changeCaregiverPassword(
+            String oldPassword, String newPassword
+    ) {
         if (newPassword == null) {
             return false;
         }
@@ -201,9 +207,10 @@ public class Storage {
         try {
             Files.writeString(caregiverFile, newPassword.trim());
             return true;
-        }
-        catch (IOException e) {
-            throw new StorageException("Failed to change caregiver password.", e);
+        } catch (IOException e) {
+            throw new StorageException(
+                    "Failed to change caregiver password.", e
+            );
         }
     }
 
@@ -246,11 +253,19 @@ public class Storage {
      * @param userFolder Folder containing the user's data.
      */
     private void loadUserRoutines(User user, Path userFolder) {
-        Path dailyRoutineFile = userFolder.resolve(DAILY_ROUTINES_FILE_NAME);
-        Path weeklyRoutineFile = userFolder.resolve(WEEKLY_ROUTINES_FILE_NAME);
+        Path dailyRoutineFile =
+                userFolder.resolve(DAILY_ROUTINES_FILE_NAME);
+        Path weeklyRoutineFile =
+                userFolder.resolve(WEEKLY_ROUTINES_FILE_NAME);
 
-        loadRoutineFile(dailyRoutineFile, user.getDailyRoutines(), RoutineType.DAILY);
-        loadRoutineFile(weeklyRoutineFile, user.getWeeklyRoutines(), RoutineType.WEEKLY);
+        loadRoutineFile(
+                dailyRoutineFile, user.getDailyRoutines(),
+                RoutineType.DAILY
+        );
+        loadRoutineFile(
+                weeklyRoutineFile, user.getWeeklyRoutines(),
+                RoutineType.WEEKLY
+        );
     }
 
     /**
@@ -270,9 +285,11 @@ public class Storage {
             stream.filter(Files::isRegularFile)
                     .sorted(Comparator.comparing(Path::getFileName))
                     .forEach(path -> addLoadedDay(user, path));
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Failed to load day files for " + user.getName(), e);
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Failed to load day files for "
+                            + user.getName(), e
+            );
         }
     }
 
@@ -315,9 +332,10 @@ public class Storage {
             writeProfileFile(userFolder, user);
             writeRoutineFiles(userFolder, user);
             writeDayFiles(daysFolder, user);
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Failed to save user " + user.getName(), e);
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Failed to save user " + user.getName(), e
+            );
         }
     }
 
@@ -357,7 +375,9 @@ public class Storage {
      */
     private void writeDayFiles(Path daysFolder, User user) throws IOException {
         for (Day day : user.getDays()) {
-            Path dayFile = daysFolder.resolve(day.getDate() + ".txt");
+            Path dayFile = daysFolder.resolve(
+                    day.getDate() + ".txt"
+            );
             saveDayFile(dayFile, day);
         }
     }
@@ -380,9 +400,10 @@ public class Storage {
             for (String line : lines) {
                 addRoutineLine(taskList, type, line);
             }
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Failed to load routine file: " + filePath, e);
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Failed to load routine file: " + filePath, e
+            );
         }
     }
 
@@ -393,7 +414,9 @@ public class Storage {
      * @param type Routine type to assign.
      * @param line Raw file line.
      */
-    private void addRoutineLine(TaskList taskList, RoutineType type, String line) {
+    private void addRoutineLine(
+            TaskList taskList, RoutineType type, String line
+    ) {
         String trimmed = line.trim();
 
         if (!trimmed.isEmpty()) {
@@ -408,7 +431,9 @@ public class Storage {
      * @param taskList Task list to persist.
      * @throws IOException If writing fails.
      */
-    private void writeRoutineFile(Path filePath, TaskList taskList) throws IOException {
+    private void writeRoutineFile(
+            Path filePath, TaskList taskList
+    ) throws IOException {
         List<String> lines = new ArrayList<>();
 
         for (Task task : taskList.getAllTasks()) {
@@ -432,9 +457,11 @@ public class Storage {
 
             applyDayFileLines(day, lines);
             return day;
-        }
-        catch (DateTimeParseException | IOException e) {
-            System.err.println("Skipping invalid day file " + filePath + ": " + e.getMessage());
+        } catch (DateTimeParseException | IOException e) {
+            System.err.println(
+                    "Skipping invalid day file "
+                            + filePath + ": " + e.getMessage()
+            );
             return null;
         }
     }
@@ -463,14 +490,11 @@ public class Storage {
         for (String line : lines) {
             if (isLogLine(line)) {
                 day.setLog(readLogValue(line));
-            }
-            else if (isDailySectionHeader(line)) {
+            } else if (isDailySectionHeader(line)) {
                 section = DAILY_SECTION;
-            }
-            else if (isWeeklySectionHeader(line)) {
+            } else if (isWeeklySectionHeader(line)) {
                 section = WEEKLY_SECTION;
-            }
-            else if (!line.isBlank()) {
+            } else if (!line.isBlank()) {
                 applyTaskStatusLine(day, line, section);
             }
         }
@@ -523,7 +547,9 @@ public class Storage {
      * @param line Raw task-status line.
      * @param section Current section name.
      */
-    private void applyTaskStatusLine(Day day, String line, String section) {
+    private void applyTaskStatusLine(
+            Day day, String line, String section
+    ) {
         String[] parts = line.split("=", 2);
 
         if (parts.length != 2) {
@@ -535,8 +561,7 @@ public class Storage {
 
         if (DAILY_SECTION.equals(section)) {
             day.setDailyCompleted(taskName, completed);
-        }
-        else if (WEEKLY_SECTION.equals(section)) {
+        } else if (WEEKLY_SECTION.equals(section)) {
             day.setWeeklyCompleted(taskName, completed);
         }
     }
@@ -548,7 +573,9 @@ public class Storage {
      * @param day Day object to persist.
      * @throws IOException If writing fails.
      */
-    private void saveDayFile(Path filePath, Day day) throws IOException {
+    private void saveDayFile(
+            Path filePath, Day day
+    ) throws IOException {
         List<String> lines = new ArrayList<>();
 
         lines.add("log=" + day.getLog());
@@ -575,7 +602,9 @@ public class Storage {
      * @param userName Name of the user.
      * @throws IOException If deletion fails.
      */
-    private void deleteUserFolder(String userName) throws IOException {
+    private void deleteUserFolder(
+            String userName
+    ) throws IOException {
         Path userFolder = getUserFolder(userName);
 
         try (Stream<Path> stream = Files.walk(userFolder)) {
@@ -601,8 +630,7 @@ public class Storage {
     private void deletePath(Path path) {
         try {
             Files.deleteIfExists(path);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -629,8 +657,7 @@ public class Storage {
         if (Files.exists(profileFile)) {
             try {
                 return Files.readString(profileFile).trim();
-            }
-            catch (IOException ignored) {
+            } catch (IOException ignored) {
                 // Fall back to folder name.
             }
         }

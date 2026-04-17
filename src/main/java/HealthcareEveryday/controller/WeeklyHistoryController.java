@@ -1,10 +1,9 @@
 package HealthcareEveryday.controller;
 
-import HealthcareEveryday.MainApp;
-import HealthcareEveryday.service.HistoryService;
-
 import java.time.format.DateTimeFormatter;
 
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.HistoryService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -157,7 +156,6 @@ public class WeeklyHistoryController {
         if (record.getMissedDays().isEmpty()) {
             return "Missed on: -";
         }
-
         return "Missed on: " + String.join(", ", record.getMissedDays());
     }
 
@@ -170,8 +168,7 @@ public class WeeklyHistoryController {
     private String buildWeeklyStatusText(HistoryService.WeeklyTaskWeeklyRecord record) {
         if (record.isDoneThisWeek()) {
             return record.getTaskName() + ": Done this week";
-        }
-        else {
+        } else {
             return record.getTaskName() + ": Not done this week";
         }
     }
@@ -186,7 +183,6 @@ public class WeeklyHistoryController {
         if (record.getDoneDays().isEmpty()) {
             return "Marked on: -";
         }
-
         return "Marked on: " + String.join(", ", record.getDoneDays());
     }
 

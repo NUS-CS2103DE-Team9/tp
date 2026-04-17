@@ -6,7 +6,6 @@ import HealthcareEveryday.model.RoutineType;
 import HealthcareEveryday.model.Task;
 import HealthcareEveryday.model.TaskList;
 import HealthcareEveryday.service.RoutineService;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -75,8 +74,7 @@ public class SeniorTasksController {
 
             loadDailyTasks(today, dailyRoutines);
             loadWeeklyTasks(today, weeklyRoutines);
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             handleLoadFailure();
         }
     }
@@ -186,8 +184,7 @@ public class SeniorTasksController {
         try {
             routineService.setDailyCompleted(userName, task.getDescription(), box.isSelected());
             statusLabel.setText("Saved.");
-        }
-        catch (RuntimeException ex) {
+        } catch (RuntimeException ex) {
             box.setSelected(previous);
             statusLabel.setText("Save failed. Please try again.");
         }
@@ -205,8 +202,7 @@ public class SeniorTasksController {
         try {
             routineService.setWeeklyCompleted(userName, task.getDescription(), box.isSelected());
             statusLabel.setText("Saved.");
-        }
-        catch (RuntimeException ex) {
+        } catch (RuntimeException ex) {
             box.setSelected(previous);
             statusLabel.setText("Save failed. Please try again.");
         }

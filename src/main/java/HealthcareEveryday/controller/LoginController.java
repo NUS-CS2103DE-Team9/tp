@@ -1,10 +1,9 @@
 package HealthcareEveryday.controller;
 
-import HealthcareEveryday.MainApp;
-import HealthcareEveryday.service.AuthService;
-
 import java.util.List;
 
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -46,8 +45,7 @@ public class LoginController {
                 Button button = createUserButton(user);
                 userContainer.getChildren().add(button);
             }
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             showLoadFailedAlert();
         }
     }

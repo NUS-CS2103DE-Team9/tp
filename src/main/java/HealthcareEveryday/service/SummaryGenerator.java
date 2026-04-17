@@ -1,9 +1,5 @@
 package HealthcareEveryday.service;
 
-import HealthcareEveryday.model.Day;
-import HealthcareEveryday.model.Task;
-import HealthcareEveryday.model.User;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,6 +7,10 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import HealthcareEveryday.model.Day;
+import HealthcareEveryday.model.Task;
+import HealthcareEveryday.model.User;
 
 /**
  * Generates summary reports for users.

@@ -1,10 +1,9 @@
 package HealthcareEveryday.controller;
 
-import HealthcareEveryday.MainApp;
-import HealthcareEveryday.service.AuthService;
-
 import java.util.Optional;
 
+import HealthcareEveryday.MainApp;
+import HealthcareEveryday.service.AuthService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
