@@ -117,4 +117,4 @@ Therefore, there is a need for a simple and user-friendly application that helps
 - Runs on desktop platforms supporting Java
 
 ### Maintainability
-- Modular structure (Model, Storage, UI)
+- Modular structure with separated UI, service, model, and storage layers

@@ -16,22 +16,26 @@ The system is intended for routine tracking and record-keeping purposes only. It
 
 ## Architecture Design
 
-The system follows a modular layered architecture consisting of three main components:
+The system follows a modular layered architecture consisting of four main components:
 
 - **UI**
+- **Service**
 - **Model**
 - **Storage**
 
-The responsibilities of the logic layer are distributed across controllers and model classes.
+The introduction of the service layer separates application logic from the JavaFX controllers.  
+Controllers are responsible for handling user interaction and scene navigation, while services process application logic and interact with storage and model objects.
 
 ### Component Interaction
 
 1. The **UI** handles user interaction through a graphical interface.
-2. Controllers process user actions and coordinate system behavior.
-3. The **Model** stores and manages application data.
-4. The **Storage** handles reading and writing data to local files.
+2. Controllers receive user actions from the UI.
+3. Controllers delegate application logic to the **Service** layer.
+4. The **Service** layer reads or updates **Model** objects.
+5. The **Service** layer uses **Storage** to persist data to local files.
+6. The UI refreshes to reflect the updated state.
 
-This structure ensures separation of concerns while keeping the implementation simple.
+This structure improves separation of concerns, reduces coupling between UI and persistence logic, and makes the system easier to maintain and extend.
 
 ---
 
@@ -55,6 +59,44 @@ Key UI views include:
 - summary generation view
 
 The UI is designed to be simple, readable, and suitable for senior users.
+
+---
+### Service Component
+
+The Service component contains the application logic of the system.
+
+It is responsible for:
+- handling routine-related operations
+- handling login and caregiver account operations
+- handling daily log operations
+- preparing history data for display
+- generating summary reports
+
+Key service classes include:
+
+#### AuthService
+- handles caregiver authentication
+- retrieves senior user names
+- adds new users
+- updates caregiver password
+
+#### RoutineService
+- retrieves daily and weekly routines
+- adds and removes routines
+- retrieves the current day record
+- updates task completion status
+
+#### LogService
+- loads today's daily log
+- saves today's daily log
+
+#### HistoryService
+- prepares today's history view data
+- prepares weekly history view data
+
+#### SummaryService
+- coordinates summary generation for a selected user
+- delegates report generation to `SummaryGenerator`
 
 ---
 
@@ -104,10 +146,10 @@ Key model classes include:
 The Storage component handles persistent data storage using local files.
 
 It is responsible for:
-- saving user profiles, routines, and logs
-- loading data when the application starts
+- saving and loading user profiles, routines, and logs
 - organizing data into user-specific folders
-- handling caregiver authentication
+- storing and validating caregiver credentials
+- providing persistence support to the service layer
 
 The storage structure is:
 
@@ -152,10 +194,11 @@ The system includes a summary generation component.
 A typical system interaction follows this sequence:
 
 1. The user performs an action in the GUI.
-2. The controller processes the action.
-3. The Model is updated.
-4. The Storage component saves the updated data.
-5. The UI refreshes to reflect the new state.
+2. A controller receives the action.
+3. The controller calls the appropriate service.
+4. The service loads or updates the required model objects.
+5. The service requests the storage component to persist the updated data.
+6. The controller refreshes the UI to reflect the new state.
 
 ---
 
@@ -177,14 +220,20 @@ A typical system interaction follows this sequence:
 
 **Scenario**: Senior marking a routine as completed
 
-1. Senior selects a task checkbox
-2. Controller receives the action
-3. Controller updates the corresponding Day object
-4. Controller calls Storage.saveUser()
-5. Storage writes updated data to file
-6. UI updates display
+1. The senior toggles a daily or weekly task checkbox in the UI.
+2. The `SeniorTasksController` receives the action.
+3. The controller determines whether the task is daily or weekly.
+4. The controller calls `RoutineService`:
+   - `setDailyCompleted(userName, taskName, selected)` for daily tasks, or
+   - `setWeeklyCompleted(userName, taskName, selected)` for weekly tasks.
+5. `RoutineService` calls `Storage.loadUser(userName)` to retrieve the user data.
+6. The `User` object is returned to the service.
+7. `RoutineService` retrieves or creates the current day using `getOrCreateDay(today)` and updates the task completion status.
+8. `RoutineService` calls `Storage.saveUser(user)` to persist the updated data.
+9. Control returns to the controller after saving is completed.
+10. The UI updates to reflect the new state (e.g., displaying "Saved.").
 
-![Sequence Diagram](images/Sequence Diagram.png)
+![Sequence Diagram](images/Sequence_Checkbox.png)
 
 ---
 
@@ -198,13 +247,14 @@ A graphical interface is easier to understand and interact with compared to comm
 
 ---
 
-### 2. Simplified layered architecture
+### 2. Layered architecture with service separation
 
-The system uses UI, Model, and Storage components.
+The system uses UI, Service, Model, and Storage components.
 
-Controllers handle interaction logic directly instead of introducing a separate logic layer.
+Controllers handle user interaction and scene flow, while the service layer contains the application logic.  
+This separates UI logic from persistence and data-processing logic, reducing coupling and improving maintainability.
 
-This reduces complexity while maintaining separation of concerns.
+The service layer also makes the code easier to extend, since new features can be added by updating service logic without overloading the controllers.
 
 ---
 
